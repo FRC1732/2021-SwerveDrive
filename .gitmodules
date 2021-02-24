@@ -1,0 +1,3 @@
+[submodule "common/Common"]
+	path = common/Common
+	url = https://github.com/FRCTeam2910/Common.git
