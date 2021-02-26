@@ -3,12 +3,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.control.DriverControls;
-import frc.robot.subsystems.TBSwerve_DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 public final class TeleOpDriveCommand extends CommandBase {
 
   private static final double DEADBAND = 0.05;
-  private static final TBSwerve_DriveSubsystem DRIVE = RobotContainer.DRIVE;
+  private static final DriveSubsystem DRIVE = RobotContainer.DRIVE;
   private static final DriverControls controls = RobotContainer.CONTROLS.getDriverControls();
 
   public TeleOpDriveCommand() {

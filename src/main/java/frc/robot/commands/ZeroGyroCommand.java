@@ -1,15 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.TBSwerve_DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 public final class ZeroGyroCommand extends InstantCommand {
 
-  private static final TBSwerve_DriveSubsystem DRIVE = RobotContainer.DRIVE;
+  private static final DriveSubsystem DRIVE = RobotContainer.DRIVE;
 
   public ZeroGyroCommand() {
-    addRequirements(DRIVE);
+    Subsystem DriveMode;
+    addRequirements(DriveMode);
   }
 
   @Override
