@@ -6,9 +6,6 @@
 *.iws
 *.ipr
 
-.wpilib/
-common
-
 ### C++ ###
 # Prerequisites
 *.d
