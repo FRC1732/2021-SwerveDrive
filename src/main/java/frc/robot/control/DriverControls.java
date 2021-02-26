@@ -1,8 +1,8 @@
-package frc.team2767.swervetesting.control;
+package frc.robot.control;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.team2767.swervetesting.command.ZeroGyroCommand;
+import frc.robot.commands.ZeroGyroCommand;
 
 public class DriverControls {
 

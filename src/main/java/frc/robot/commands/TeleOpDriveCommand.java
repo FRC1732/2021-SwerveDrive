@@ -1,14 +1,14 @@
-package frc.team2767.swervetesting.command;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team2767.swervetesting.RobotContainer;
-import frc.team2767.swervetesting.control.DriverControls;
-import frc.team2767.swervetesting.subsystem.DriveSubsystem;
+import frc.robot.RobotContainer;
+import frc.robot.control.DriverControls;
+import frc.robot.subsystems.TBSwerve_DriveSubsystem;
 
 public final class TeleOpDriveCommand extends CommandBase {
 
   private static final double DEADBAND = 0.05;
-  private static final DriveSubsystem DRIVE = RobotContainer.DRIVE;
+  private static final TBSwerve_DriveSubsystem DRIVE = RobotContainer.DRIVE;
   private static final DriverControls controls = RobotContainer.CONTROLS.getDriverControls();
 
   public TeleOpDriveCommand() {

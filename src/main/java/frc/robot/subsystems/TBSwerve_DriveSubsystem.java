@@ -1,21 +1,21 @@
-package frc.team2767.swervetesting.subsystem;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2767.swervetesting.RobotContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.strykeforce.thirdcoast.swerve.SwerveDrive;
 import org.strykeforce.thirdcoast.swerve.SwerveDriveConfig;
 import org.strykeforce.thirdcoast.swerve.Wheel;
 import org.strykeforce.thirdcoast.telemetry.TelemetryService;
 
-public class DriveSubsystem extends SubsystemBase {
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+
+public class TBSwerve_DriveSubsystem extends SubsystemBase {
 
   private static final double DRIVE_SETPOINT_MAX = 0.0;
   private static final double ROBOT_LENGTH = 1.0;
@@ -25,9 +25,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final TelemetryService telemetryService = RobotContainer.TELEMETRY;
   private final SwerveDrive swerve = getSwerve();
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-  public DriveSubsystem() {
+  public TBSwerve_DriveSubsystem() {
     swerve.setFieldOriented(true);
     zeroAzimuths();
   }
@@ -45,7 +43,6 @@ public class DriveSubsystem extends SubsystemBase {
     gyro.setAngleAdjustment(0);
     double adj = gyro.getAngle() % 360;
     gyro.setAngleAdjustment(-adj);
-    logger.info("resetting gyro: ({})", adj);
   }
 
   // Swerve configuration

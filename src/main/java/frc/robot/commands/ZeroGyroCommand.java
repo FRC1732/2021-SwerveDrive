@@ -1,12 +1,12 @@
-package frc.team2767.swervetesting.command;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.team2767.swervetesting.RobotContainer;
-import frc.team2767.swervetesting.subsystem.DriveSubsystem;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.TBSwerve_DriveSubsystem;
 
 public final class ZeroGyroCommand extends InstantCommand {
 
-  private static final DriveSubsystem DRIVE = RobotContainer.DRIVE;
+  private static final TBSwerve_DriveSubsystem DRIVE = RobotContainer.DRIVE;
 
   public ZeroGyroCommand() {
     addRequirements(DRIVE);
