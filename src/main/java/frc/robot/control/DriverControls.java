@@ -2,17 +2,39 @@ package frc.robot.control;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.ZeroGyroCommand;
 
 public class DriverControls {
 
   private Joystick joystick;
 
-  DriverControls(int portNumber) {
-    joystick = new Joystick(portNumber);
+  DriverControls(int port) {
+    joystick = new Joystick(port);
 
-    // Drive Commands
+    // Shoulder switches
+    new JoystickButton(joystick, Shoulder.LEFT_DOWN.id).whenPressed(log(Shoulder.LEFT_DOWN));
+    new JoystickButton(joystick, Shoulder.LEFT_UP.id).whenPressed(log(Shoulder.LEFT_UP));
+    new JoystickButton(joystick, Shoulder.RIGHT_DOWN.id).whenPressed(log(Shoulder.RIGHT_DOWN));
+
+    // Push-buttons
     new JoystickButton(joystick, Button.RESET.id).whenPressed(new ZeroGyroCommand());
+
+    new JoystickButton(joystick, Button.HAMBURGER.id).whenPressed(log(Button.HAMBURGER));
+    new JoystickButton(joystick, Button.X.id).whenPressed(log(Button.X));
+    new JoystickButton(joystick, Button.UP.id).whenPressed(log(Button.UP));
+    new JoystickButton(joystick, Button.DOWN.id).whenPressed(log(Button.DOWN));
+
+    // Trim Switches
+    new JoystickButton(joystick, Trim.LEFT_X_POS.id).whenPressed(log(Trim.LEFT_X_POS));
+    new JoystickButton(joystick, Trim.LEFT_X_NEG.id).whenPressed(log(Trim.LEFT_X_NEG));
+    new JoystickButton(joystick, Trim.LEFT_Y_POS.id).whenPressed(log(Trim.LEFT_Y_POS));
+    new JoystickButton(joystick, Trim.LEFT_Y_NEG.id).whenPressed(log(Trim.LEFT_Y_NEG));
+    new JoystickButton(joystick, Trim.RIGHT_X_POS.id).whenPressed(log(Trim.RIGHT_X_POS));
+    new JoystickButton(joystick, Trim.RIGHT_X_NEG.id).whenPressed(log(Trim.RIGHT_X_NEG));
+    new JoystickButton(joystick, Trim.RIGHT_Y_POS.id).whenPressed(log(Trim.RIGHT_Y_POS));
+    new JoystickButton(joystick, Trim.RIGHT_Y_NEG.id).whenPressed(log(Trim.RIGHT_Y_NEG));
   }
 
   /** Left stick X (up-down) axis. */
@@ -28,6 +50,25 @@ public class DriverControls {
   /** Right stick Y (left-right) axis. */
   public double getYaw() {
     return joystick.getRawAxis(Axis.RIGHT_Y.id);
+  }
+
+  /** Tuner knob. */
+  public double getTuner() {
+    return joystick.getRawAxis(Axis.TUNER.id);
+  }
+
+  /** Left slider on back of controller. */
+  public double getLeftBackAxis() {
+    return joystick.getRawAxis(Axis.LEFT_BACK.id);
+  }
+
+  /** Right slider on back of controller. */
+  public double getRightBackAxis() {
+    return joystick.getRawAxis(Axis.RIGHT_BACK.id);
+  }
+
+  private <E extends Enum<E>> Command log(E control) {
+    return new PrintCommand(control.toString());
   }
 
   public enum Axis {

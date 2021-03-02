@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.strykeforce.thirdcoast.swerve.SwerveDrive;
@@ -70,14 +71,16 @@ public class DriveSubsystem extends SubsystemBase {
     azimuthConfig.continuousCurrentLimit = 10;
     azimuthConfig.peakCurrentDuration = 0;
     azimuthConfig.peakCurrentLimit = 0;
-    azimuthConfig.slot0.kP = 20;
+    azimuthConfig.slot0.kP = 10;
     azimuthConfig.slot0.kI = 0.0;
-    azimuthConfig.slot0.kD = 300.0;
+    azimuthConfig.slot0.kD = 100.0;
     azimuthConfig.slot0.kF = 0.0;
     azimuthConfig.slot0.integralZone = 0;
     azimuthConfig.slot0.allowableClosedloopError = 0;
     azimuthConfig.motionAcceleration = 10_000;
     azimuthConfig.motionCruiseVelocity = 800;
+
+    //Drive Power Limits
     azimuthConfig.peakOutputForward = 0.75;
     azimuthConfig.peakOutputReverse = -0.75;
 
@@ -90,11 +93,13 @@ public class DriveSubsystem extends SubsystemBase {
     Wheel[] wheels = new Wheel[4];
 
     for (int i = 0; i < 4; i++) {
+      //Assumes CAN IDs 0-3 for azimuth (turning) motors
       TalonSRX azimuthTalon = new TalonSRX(i);
       azimuthTalon.configAllSettings(azimuthConfig);
 
       telemetryService.register(azimuthTalon);
 
+      //Assumes CAN IDs 10-13 for drive motors
       TalonSRX driveTalon = new TalonSRX(i + 10);
       driveTalon.configAllSettings(driveConfig);
       driveTalon.setNeutralMode(NeutralMode.Brake);
