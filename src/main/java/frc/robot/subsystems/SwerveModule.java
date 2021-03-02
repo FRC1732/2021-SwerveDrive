@@ -19,6 +19,9 @@ public class SwerveModule extends PIDSubsystem {
   CANSparkMax angle;
   double setpoint;
 
+  /// ####################################################################
+  /// THIS IS HERE AS AN EXAMPLE FOR BOTH TALON AND SPARK DECLARATIONS
+  /// ####################################################################
   public SwerveModule(int talonID, int sparkID) {
     super(
         // The PIDController used by the subsystem
@@ -28,6 +31,9 @@ public class SwerveModule extends PIDSubsystem {
 
     
   }
+
+  /// ####################################################################
+
   public void drive(double speed, double angle){
     drive.set(ControlMode.PercentOutput, speed);
     setpoint = angle * (12 * .5) + (12 * .5);

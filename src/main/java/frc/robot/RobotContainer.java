@@ -15,14 +15,10 @@ public class RobotContainer {
   public RobotContainer() {
 
     if (RobotBase.isReal()) {
-
       TELEMETRY = new TelemetryService(TelemetryController::new);
-
       DRIVE = new DriveSubsystem();
       CONTROLS = new Controls();
-
       TELEMETRY.start();
-
       DRIVE.setDefaultCommand(new TeleOpDriveCommand());
     }
   }
