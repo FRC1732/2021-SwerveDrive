@@ -9,8 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Robot extends TimedRobot {
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  //private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private RobotContainer m_robotContainer;
 
@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     RobotContainer.DRIVE.zeroGyro();
-    logger.debug("Robot initialization complete");
+    System.out.println("Robot initialization complete");
   }
 
   @Override

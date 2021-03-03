@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.strykeforce.thirdcoast.swerve.SwerveDrive;
 import org.strykeforce.thirdcoast.swerve.SwerveDriveConfig;
 import org.strykeforce.thirdcoast.swerve.Wheel;
@@ -26,7 +26,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final TelemetryService telemetryService = RobotContainer.TELEMETRY;
   private final SwerveDrive swerve = getSwerve();
 
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  //private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   public DriveSubsystem() {
     swerve.setFieldOriented(true);
@@ -46,7 +46,7 @@ public class DriveSubsystem extends SubsystemBase {
     gyro.setAngleAdjustment(0);
     double adj = gyro.getAngle() % 360;
     gyro.setAngleAdjustment(-adj);
-    logger.info("resetting gyro: ({})", adj);
+    System.out.printf("resetting gyro: ({})", adj);
   }
 
   // Swerve configuration
