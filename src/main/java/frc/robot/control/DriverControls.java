@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.ZeroGyroCommand;
 
 public class DriverControls {
 
@@ -19,8 +18,6 @@ public class DriverControls {
     new JoystickButton(joystick, Shoulder.RIGHT_DOWN.id).whenPressed(log(Shoulder.RIGHT_DOWN));
 
     // Push-buttons
-    new JoystickButton(joystick, Button.RESET.id).whenPressed(new ZeroGyroCommand());
-
     new JoystickButton(joystick, Button.HAMBURGER.id).whenPressed(log(Button.HAMBURGER));
     new JoystickButton(joystick, Button.X.id).whenPressed(log(Button.X));
     new JoystickButton(joystick, Button.UP.id).whenPressed(log(Button.UP));
