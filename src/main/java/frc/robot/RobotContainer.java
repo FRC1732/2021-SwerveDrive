@@ -1,7 +1,11 @@
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -80,15 +84,12 @@ public class RobotContainer {
     // Declare subsystems
     s_drivetrain = new Drivetrain();
     s_drivetrain.setDefaultCommand(new DriveWithJoystick(null, null, null, null));
-
-    // Define Buttons
-    defineButtons();
-
-    // Configure the button bindings
-    configureButtonBindings();
-
-    // Define Autonomous Components
-    defineAutonomousComponents();
+    
+    defineButtons();                // Define Buttons
+    configureButtonBindings();      // Configure the button bindings
+    defineAutonomousComponents();   // Define Autonomous Components
+    reportJoystickData();
+    initShuffleboardAuto();
 
   }
 
@@ -185,6 +186,40 @@ public class RobotContainer {
     // climbDown.whenInactive(new StopClimber(climber));
   }
 
+  private void reportJoystickData()
+  {
+    ShuffleboardTab tab = Shuffleboard.getTab("Joysticks");
+    tab.addNumber("Left X-axis", l_joystick::getX);
+    tab.addNumber("Left Y-axis", l_joystick::getY);
+    tab.addNumber("Left Y-axis", l_joystick::getZ);
+    tab.addBoolean("LB1", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_1)); 
+    tab.addBoolean("LB2", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_2)); 
+    tab.addBoolean("LB3", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_3)); 
+    tab.addBoolean("LB4", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_4)); 
+    tab.addBoolean("LB5", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_5)); 
+    tab.addBoolean("LB6", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_6)); 
+    tab.addBoolean("LB7", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_7)); 
+    tab.addBoolean("LB8", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_8)); 
+    tab.addBoolean("LB9", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
+    tab.addBoolean("LB10", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
+    tab.addBoolean("LB11", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
+
+    tab.addNumber("Right X-axis", r_joystick::getX);
+    tab.addNumber("Right Y-axis", r_joystick::getY);
+    tab.addNumber("Right Y-axis", r_joystick::getZ);
+    tab.addBoolean("RB1", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_1)); 
+    tab.addBoolean("RB2", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_2)); 
+    tab.addBoolean("RB3", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_3)); 
+    tab.addBoolean("RB4", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_4)); 
+    tab.addBoolean("RB5", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_5)); 
+    tab.addBoolean("RB6", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_6)); 
+    tab.addBoolean("RB7", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_7)); 
+    tab.addBoolean("RB8", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_8)); 
+    tab.addBoolean("RB9", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
+    tab.addBoolean("RB10", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
+    tab.addBoolean("RB11", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
+  }
+
   private void defineAutonomousComponents() {
     driveDistanceAuto = new DriveDistance(s_drivetrain, -3);
   }
@@ -202,12 +237,16 @@ public class RobotContainer {
     //     .andThen(smartShooterAuto).withTimeout(3);
   }
 
-  private void initShuffleboard() {
-    autonomousModeOption = new SendableChooser<>();
-    autonomousModeOption.setDefaultOption("Eight Ball Version 1", c_eightBallVersionOne);
-    autonomousModeOption.addOption("Eight Ball Version 2", c_eightBallVersionTwo);
-    autonomousModeOption.addOption("Drive Distance Auto", driveDistanceAuto);
-    SmartDashboard.putData("Auto selection", autonomousModeOption);
+  private void initShuffleboardAuto() {
+    
+    // Good (working) example of Sendable Chooser to use dropdown option from Shuffleboard to get a selected option 
+    // to run an auto routine
+    
+    // autonomousModeOption = new SendableChooser<>();
+    // autonomousModeOption.setDefaultOption("Eight Ball Version 1", c_eightBallVersionOne);
+    // autonomousModeOption.addOption("Eight Ball Version 2", c_eightBallVersionTwo);
+    // autonomousModeOption.addOption("Drive Distance Auto", driveDistanceAuto);
+    // SmartDashboard.putData("Auto selection", autonomousModeOption);
   }
 
   /**
