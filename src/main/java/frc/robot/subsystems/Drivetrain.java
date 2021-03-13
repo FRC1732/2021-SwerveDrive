@@ -82,4 +82,9 @@ public class Drivetrain extends SubsystemBase {
         m_backLeft.getState(),
         m_backRight.getState());
   }
+
+    // Stops the motors from 
+    public void stop() {
+      drive(0,0,0,false);
+    }
 }
