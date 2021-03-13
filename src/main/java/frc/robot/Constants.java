@@ -31,24 +31,50 @@ public final class Constants {
     public static final int DRIVETRAIN_M3_DRIVE = 12;
     public static final int DRIVETRAIN_M4_DRIVE = 13;
 
-    //================== Driver Interface (Joysticks) ==================
+    //================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;
-    public static final int RIGHT_JOYSTICK_PORT_ID = 1;
+    public static final int L_JOYSTICKBUTTON_1 = 1;
+    public static final int L_JOYSTICKBUTTON_2 = 2;
+    public static final int L_JOYSTICKBUTTON_3 = 3;
+    public static final int L_JOYSTICKBUTTON_4 = 4;
+    public static final int L_JOYSTICKBUTTON_5 = 5;
+    public static final int L_JOYSTICKBUTTON_6 = 6;
+    public static final int L_JOYSTICKBUTTON_7 = 7;
+    public static final int L_JOYSTICKBUTTON_8 = 8;
+    public static final int L_JOYSTICKBUTTON_9 = 9;
+    public static final int L_JOYSTICKBUTTON_10 = 10;
+    public static final int L_JOYSTICKBUTTON_11 = 11;
+    public static final int L_JOYSTICKBUTTON_12 = 12;
 
-    // ================== Operator Interface (buttons) ==================
+    //================== Driver ::: Right Joystick ::: Mapping ==================
+    public static final int RIGHT_JOYSTICK_PORT_ID = 1;
+    public static final int R_JOYSTICKBUTTON_1 = 1;
+    public static final int R_JOYSTICKBUTTON_2 = 2;
+    public static final int R_JOYSTICKBUTTON_3 = 3;
+    public static final int R_JOYSTICKBUTTON_4 = 4;
+    public static final int R_JOYSTICKBUTTON_5 = 5;
+    public static final int R_JOYSTICKBUTTON_6 = 6;
+    public static final int R_JOYSTICKBUTTON_7 = 7;
+    public static final int R_JOYSTICKBUTTON_8 = 8;
+    public static final int R_JOYSTICKBUTTON_9 = 9;
+    public static final int R_JOYSTICKBUTTON_10 = 10;
+    public static final int R_JOYSTICKBUTTON_11 = 11;
+    public static final int R_JOYSTICKBUTTON_12 = 12;
+
+    //================== Operator ::: Joystick ::: Mapping ==================
     public static final int OPERATOR_JOYSTICK_PORT_ID = 2;
-    public static final int O_JOYSTICKBUTTON_ENABLE_CLIMB = 1;
-    public static final int O_JOYSTICKBUTTON_MANUAL_UP = 2;
-    public static final int O_JOYSTICKBUTTON_MANUAL_DOWN = 3;
-    public static final int O_JOYSTICKBUTTON_MANUAL_SPEED_UP = 4;
-    public static final int O_JOYSTICKBUTTON_MANUAL_SPEED_DOWN = 5;
-    public static final int O_JOYSTICKBUTTON_MAINTAIN_RPM = 6;
-    public static final int O_JOYSTICKBUTTON_UNALLOCATED_BUTTON = 7;
-    public static final int O_JOYSTICKBUTTON_CHANGE_INTAKE_SOLENOID_STATE = 8;
-    public static final int O_JOYSTICKBUTTON_ROTATE_TO_LIMELIGHT = 9;
-    public static final int O_JOYSTICKBUTTON_REVERSE_INTAKE = 10;
-    public static final int O_JOYSTICKBUTTON_FEED_SHOOTER = 11;
-    public static final int O_JOYSTICKBUTTON_REVERSE_FEED_SHOOTER = 12;
+    public static final int O_JOYSTICKBUTTON_1 = 1;
+    public static final int O_JOYSTICKBUTTON_2 = 2;
+    public static final int O_JOYSTICKBUTTON_3 = 3;
+    public static final int O_JOYSTICKBUTTON_4 = 4;
+    public static final int O_JOYSTICKBUTTON_5 = 5;
+    public static final int O_JOYSTICKBUTTON_6 = 6;
+    public static final int O_JOYSTICKBUTTON_7 = 7;
+    public static final int O_JOYSTICKBUTTON_8 = 8;
+    public static final int O_JOYSTICKBUTTON_9 = 9;
+    public static final int O_JOYSTICKBUTTON_10 = 10;
+    public static final int O_JOYSTICKBUTTON_11 = 11;
+    public static final int O_JOYSTICKBUTTON_12 = 12;
 
 }
 
