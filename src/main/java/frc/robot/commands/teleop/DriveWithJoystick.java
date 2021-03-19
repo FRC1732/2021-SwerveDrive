@@ -2,11 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.teleop;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -14,11 +13,8 @@ public class DriveWithJoystick extends CommandBase {
 
   private Joystick leftJoystick;
   private Joystick rightJoystick;
-  private Drivetrain drivetrain;
   private Boolean fieldCentric;
-
-  private final XboxController m_controller = new XboxController(0);
-  private final Drivetrain m_swerve = new Drivetrain();
+  private Drivetrain m_swerve;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -29,7 +25,7 @@ public class DriveWithJoystick extends CommandBase {
     addRequirements(drivetrain);
     this.leftJoystick = leftJoystick;
     this.rightJoystick = rightJoystick;
-    this.drivetrain = drivetrain;
+    this.m_swerve = drivetrain;
     this.fieldCentric = fieldCentric;
   }
 
