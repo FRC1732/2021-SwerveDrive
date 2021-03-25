@@ -21,15 +21,15 @@ package frc.robot;
 public final class Constants {
   
     //================== Subsystem ::: Drivetrain ==================
-    public static final int DRIVETRAIN_M1_AZIMUTH = 0;
-    public static final int DRIVETRAIN_M2_AZIMUTH = 1;
-    public static final int DRIVETRAIN_M3_AZIMUTH = 2;
-    public static final int DRIVETRAIN_M4_AZIMUTH = 3;
+    public static final int DRIVETRAIN_M1_AZIMUTH = 6;
+    public static final int DRIVETRAIN_M2_AZIMUTH = 7;
+    public static final int DRIVETRAIN_M3_AZIMUTH = 8;
+    public static final int DRIVETRAIN_M4_AZIMUTH = 9;
      
-    public static final int DRIVETRAIN_M1_DRIVE = 10;
-    public static final int DRIVETRAIN_M2_DRIVE = 11;
-    public static final int DRIVETRAIN_M3_DRIVE = 12;
-    public static final int DRIVETRAIN_M4_DRIVE = 13;
+    public static final int DRIVETRAIN_M1_DRIVE = 2;
+    public static final int DRIVETRAIN_M2_DRIVE = 3;
+    public static final int DRIVETRAIN_M3_DRIVE = 4;
+    public static final int DRIVETRAIN_M4_DRIVE = 5;
 
     //================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;
