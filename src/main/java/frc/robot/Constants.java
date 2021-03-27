@@ -76,5 +76,20 @@ public final class Constants {
     public static final int O_JOYSTICKBUTTON_11 = 11;
     public static final int O_JOYSTICKBUTTON_12 = 12;
 
+    //================== Test ::: Joystick ::: Mapping ==================
+    public static final int TEST_JOYSTICK_PORT_ID = 3;
+    public static final int T_JOYSTICKBUTTON_1 = 1;
+    public static final int T_JOYSTICKBUTTON_2 = 2;
+    public static final int T_JOYSTICKBUTTON_3 = 3;
+    public static final int T_JOYSTICKBUTTON_4 = 4;
+    public static final int T_JOYSTICKBUTTON_5 = 5;
+    public static final int T_JOYSTICKBUTTON_6 = 6;
+    public static final int T_JOYSTICKBUTTON_7 = 7;
+    public static final int T_JOYSTICKBUTTON_8 = 8;
+    public static final int T_JOYSTICKBUTTON_9 = 9;
+    public static final int T_JOYSTICKBUTTON_10 = 10;
+    public static final int T_JOYSTICKBUTTON_11 = 11;
+    public static final int T_JOYSTICKBUTTON_12 = 12;
+
 }
 

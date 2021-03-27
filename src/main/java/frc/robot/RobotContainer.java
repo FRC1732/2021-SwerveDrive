@@ -100,12 +100,12 @@ public class RobotContainer {
     // Operator joystick declaration
     o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
 
-    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3)
+    /*new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3)
         .whenPressed(() -> motorTestSubsystem.runMotor(0.2))
-        .whenReleased(() -> motorTestSubsystem.runMotor(0));
+        .whenReleased(() -> motorTestSubsystem.runMotor(0));*/
 
     // Driver - Left joystick button declaration
-    /*
+    
     l_button_1 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_1);
     l_button_2 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2);
     l_button_3 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3);
@@ -143,7 +143,7 @@ public class RobotContainer {
     o_button_9 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_9);
     o_button_10 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_10);
     o_button_11 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_11);
-    o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12); */
+    o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12); 
 
     // Trigger declaration examples
     // shoot = o_maintainRPM.and(smartShooter);
@@ -207,10 +207,10 @@ public class RobotContainer {
     tab.addBoolean("LB9", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
     tab.addBoolean("LB10", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
     tab.addBoolean("LB11", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
-/*
+
     tab.addNumber("Right X-axis", r_joystick::getX);
     tab.addNumber("Right Y-axis", r_joystick::getY);
-    tab.addNumber("Right Y-axis", r_joystick::getZ);
+    tab.addNumber("Right Z-axis", r_joystick::getZ);
     tab.addBoolean("RB1", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_1)); 
     tab.addBoolean("RB2", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_2)); 
     tab.addBoolean("RB3", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_3)); 
@@ -221,7 +221,7 @@ public class RobotContainer {
     tab.addBoolean("RB8", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_8)); 
     tab.addBoolean("RB9", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
     tab.addBoolean("RB10", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
-    tab.addBoolean("RB11", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); */
+    tab.addBoolean("RB11", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
   }
 
   private void defineAutonomousComponents() {
@@ -262,4 +262,5 @@ public class RobotContainer {
     return (Command) autonomousModeOption.getSelected();
   }
 
+  
 }
