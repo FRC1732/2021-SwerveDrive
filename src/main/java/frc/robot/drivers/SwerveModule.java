@@ -17,9 +17,14 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 public class SwerveModule {
+  private final SwervePosition m_position;
   private static final double kWheelRadius = 0.0613;
   private static final int kEncoderResolution = 4096;
 
@@ -39,15 +44,24 @@ public class SwerveModule {
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
+  private ShuffleboardTab tab = Shuffleboard.getTab("Swerve Modules");
+
+  private double driveOutput;
+  private double driveFeedforward;
+  private double turnOutput;
+  private double turnFeedforward;
+  private SwerveModuleState optimizedState;
+
   /**
    * Constructs a SwerveModule.
    *
    * @param driveMotorChannel   ID for the drive motor.
    * @param turningMotorChannel ID for the turning motor.
    */
-  public SwerveModule(int talonID, int sparkID) {
+  public SwerveModule(int talonID, int sparkID, SwervePosition position) {
+    m_position = position;
     m_driveMotor = new TalonFX(talonID);
-    m_turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);    
+    m_turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     m_turningMotor.restoreFactoryDefaults();
 
     // Set the distance per pulse for the drive encoder. We can simply use the
@@ -66,6 +80,23 @@ public class SwerveModule {
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    optimizedState = new SwerveModuleState();
+
+    initShuffleBoard(position);
+  }
+
+  private void initShuffleBoard(SwervePosition position) {
+    // String prefix = position.toString();
+    ShuffleboardLayout layout = tab.getLayout(position.toString(), BuiltInLayouts.kList).withSize(2, 4);
+
+    layout.addNumber("Encoder Position", m_turningEncoder::getPosition).withPosition(0, 0);
+    layout.addNumber("Encoder Speed", m_turningMotor::get).withPosition(0, 1);
+    layout.addNumber("Encoder Output", this::getTurnOutput).withPosition(0, 2);
+    layout.addNumber("Encoder Feed Forward", this::getTurnFeedforward).withPosition(0, 3);
+    layout.addString("State", () -> this.getState().toString()).withPosition(0, 4);
+    layout.addNumber("Encoder Target", () -> optimizedState.angle.getRadians()).withPosition(0, 5);
+    // layout.addNumber("Encoder Speed", m_turningMotor::get).withPosition(0, 1);
+
   }
 
   /**
@@ -74,7 +105,8 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getSelectedSensorVelocity(), new Rotation2d(m_turningMotor.getEncoder().getPosition()));
+    return new SwerveModuleState(m_driveMotor.getSelectedSensorVelocity(),
+        new Rotation2d(m_turningEncoder.getPosition()));
   }
 
   /**
@@ -84,19 +116,20 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningMotor.getEncoder().getVelocity()));
+    optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getSelectedSensorVelocity(), state.speedMetersPerSecond);
+    final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getSelectedSensorVelocity(),
+    optimizedState.speedMetersPerSecond);
 
-    final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+    final double driveFeedforward = m_driveFeedforward.calculate(optimizedState.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
+    turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), optimizedState.angle.getRadians());
 
-    final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    //m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
+    // m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
 
@@ -106,6 +139,22 @@ public class SwerveModule {
 
   public CANSparkMax getTurningMotor() {
     return m_turningMotor;
+  }
+
+  public double getDriveOutput() {
+    return driveOutput;
+  }
+
+  public double getDriveFeedforward() {
+    return driveFeedforward;
+  }
+
+  public double getTurnOutput() {
+    return turnOutput;
+  }
+
+  public double getTurnFeedforward() {
+    return turnFeedforward;
   }
 
 }

@@ -68,7 +68,7 @@ public class DriveWithJoystick extends CommandBase {
 
     t5 = timer.get();
     if (counter++ > 100) {
-      System.out.println(String.format("Timers (%f) (%f) (%f) (%f)", t2 - t1, t3 - t2, t4 - t3, t5 - t4));
+      //System.out.println(String.format("Timers (%f) (%f) (%f) (%f)", t2 - t1, t3 - t2, t4 - t3, t5 - t4));
       System.out.println(String.format("X/Y/Rot (%f) (%f) (%f)", xSpeed, ySpeed, rot));
       counter = 0;
     }
