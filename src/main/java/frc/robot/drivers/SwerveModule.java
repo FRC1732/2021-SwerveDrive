@@ -27,8 +27,8 @@ public class SwerveModule {
   private final TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
-  private final Encoder m_driveEncoder = new Encoder(0, 1);
-  private final Encoder m_turningEncoder = new Encoder(2, 3);
+  private final Encoder m_driveEncoder;// = new Encoder(0, 1);
+  private final Encoder m_turningEncoder;// = new Encoder(2, 3);
 
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
@@ -52,12 +52,14 @@ public class SwerveModule {
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
+    //m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
+    m_driveEncoder = null;
 
     // Set the distance (in this case, angle) per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * wpi::math::pi)
     // divided by the encoder resolution.
-    m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+    //m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+    m_turningEncoder = null;
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.

@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.teleop.DriveWithJoystick;
 import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.MotorTestSubsystem;
 
 public class RobotContainer {
   public static Drivetrain s_drivetrain;
+  private MotorTestSubsystem motorTestSubsystem;
 
   private SendableChooser autonomousModeOption;
   // Driver Joysticks
@@ -79,7 +81,8 @@ public class RobotContainer {
 
     // Declare subsystems
     s_drivetrain = new Drivetrain();
-    s_drivetrain.setDefaultCommand(new DriveWithJoystick(null, null, null, null));
+    //s_drivetrain.setDefaultCommand(new DriveWithJoystick(null, null, null, null));
+    motorTestSubsystem = new MotorTestSubsystem();
     
     defineButtons();                // Define Buttons
     configureButtonBindings();      // Configure the button bindings
@@ -97,7 +100,12 @@ public class RobotContainer {
     // Operator joystick declaration
     o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
 
+    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3)
+        .whenPressed(() -> motorTestSubsystem.runMotor(0.2))
+        .whenReleased(() -> motorTestSubsystem.runMotor(0));
+
     // Driver - Left joystick button declaration
+    /*
     l_button_1 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_1);
     l_button_2 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2);
     l_button_3 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3);
@@ -135,7 +143,7 @@ public class RobotContainer {
     o_button_9 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_9);
     o_button_10 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_10);
     o_button_11 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_11);
-    o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12);
+    o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12); */
 
     // Trigger declaration examples
     // shoot = o_maintainRPM.and(smartShooter);
@@ -187,7 +195,7 @@ public class RobotContainer {
     ShuffleboardTab tab = Shuffleboard.getTab("Joysticks");
     tab.addNumber("Left X-axis", l_joystick::getX);
     tab.addNumber("Left Y-axis", l_joystick::getY);
-    tab.addNumber("Left Y-axis", l_joystick::getZ);
+    tab.addNumber("Left Z-axis", l_joystick::getZ);
     tab.addBoolean("LB1", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_1)); 
     tab.addBoolean("LB2", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_2)); 
     tab.addBoolean("LB3", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_3)); 
@@ -199,7 +207,7 @@ public class RobotContainer {
     tab.addBoolean("LB9", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
     tab.addBoolean("LB10", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
     tab.addBoolean("LB11", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
-
+/*
     tab.addNumber("Right X-axis", r_joystick::getX);
     tab.addNumber("Right Y-axis", r_joystick::getY);
     tab.addNumber("Right Y-axis", r_joystick::getZ);
@@ -213,7 +221,7 @@ public class RobotContainer {
     tab.addBoolean("RB8", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_8)); 
     tab.addBoolean("RB9", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
     tab.addBoolean("RB10", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
-    tab.addBoolean("RB11", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
+    tab.addBoolean("RB11", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); */
   }
 
   private void defineAutonomousComponents() {

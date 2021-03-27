@@ -33,14 +33,14 @@ public class Drivetrain extends SubsystemBase {
   private final Translation2d m_backRightLocation = new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
   // Translation2d(-0.193, -0.193);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(Constants.DRIVETRAIN_M1_DRIVE,
-      Constants.DRIVETRAIN_M1_AZIMUTH);
-  private final SwerveModule m_frontRight = new SwerveModule(Constants.DRIVETRAIN_M2_DRIVE,
-      Constants.DRIVETRAIN_M2_AZIMUTH);
-  private final SwerveModule m_backLeft = new SwerveModule(Constants.DRIVETRAIN_M3_DRIVE,
-      Constants.DRIVETRAIN_M3_AZIMUTH);
-  private final SwerveModule m_backRight = new SwerveModule(Constants.DRIVETRAIN_M4_DRIVE,
-      Constants.DRIVETRAIN_M4_AZIMUTH);
+  private final SwerveModule m_frontLeft = new SwerveModule(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
+      Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH);
+  private final SwerveModule m_frontRight = new SwerveModule(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
+      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH);
+  private final SwerveModule m_backLeft = new SwerveModule(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
+      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH);
+  private final SwerveModule m_backRight = new SwerveModule(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
+      Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH);
 
   private final Gyro m_gyro;
 
