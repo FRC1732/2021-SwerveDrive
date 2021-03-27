@@ -29,6 +29,18 @@ public class RobotContainer {
   private Command c_eightBallVersionOne;
   private Command c_eightBallVersionTwo;
 
+  // Test Commands
+  private boolean haveTestJoystick;
+  private Joystick t_joystick;
+  private JoystickButton t_button_1;
+  private JoystickButton t_button_2;
+  private JoystickButton t_button_3;
+  private JoystickButton t_button_4;
+  private JoystickButton t_button_5;
+  private JoystickButton t_button_6;
+  private JoystickButton t_button_7;
+  private JoystickButton t_button_8;
+
   // LeftJoystick Buttons
   private JoystickButton l_button_1;
   private JoystickButton l_button_2;
@@ -82,7 +94,7 @@ public class RobotContainer {
     // Declare subsystems
     s_drivetrain = new Drivetrain();
     //s_drivetrain.setDefaultCommand(new DriveWithJoystick(null, null, null, null));
-    motorTestSubsystem = new MotorTestSubsystem();
+    motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
     
     defineButtons();                // Define Buttons
     configureButtonBindings();      // Configure the button bindings
@@ -100,12 +112,7 @@ public class RobotContainer {
     // Operator joystick declaration
     o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
 
-    /*new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3)
-        .whenPressed(() -> motorTestSubsystem.runMotor(0.2))
-        .whenReleased(() -> motorTestSubsystem.runMotor(0));*/
-
-    // Driver - Left joystick button declaration
-    
+    // Driver - Left joystick button declaration    
     l_button_1 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_1);
     l_button_2 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2);
     l_button_3 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3);
@@ -144,6 +151,26 @@ public class RobotContainer {
     o_button_10 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_10);
     o_button_11 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_11);
     o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12); 
+
+    try{
+      t_joystick = new Joystick(Constants.TEST_JOYSTICK_PORT_ID);
+      if(t_joystick == null){
+        haveTestJoystick = false;
+      } else {
+        haveTestJoystick = true;
+      }
+    } catch(Exception e){
+      System.out.println("No test joystick found.  Test mode will not be available.");
+      haveTestJoystick= false;
+    }
+
+
+    if(haveTestJoystick) {
+      new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3)
+      .whenPressed(() -> motorTestSubsystem.runMotor(0.2))
+      .whenReleased(() -> motorTestSubsystem.runMotor(0));
+    }
+        
 
     // Trigger declaration examples
     // shoot = o_maintainRPM.and(smartShooter);

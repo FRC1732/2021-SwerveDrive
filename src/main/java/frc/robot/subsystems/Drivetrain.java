@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivers.SwerveModule;
+import frc.robot.drivers.SwervePosition;
 import frc.robot.Constants;
 
 /** Represents a swerve drive style drivetrain. */
@@ -92,5 +93,24 @@ public class Drivetrain extends SubsystemBase {
   // Stops the motors from
   public void stop() {
     drive(0, 0, 0, false);
+  }
+
+  public SwerveModule getByPosition(SwervePosition position) {
+    switch (position) {
+      case BackLeft:
+        return m_backLeft;
+
+      case BackRight:
+        return m_backRight;
+
+      case FrontLeft:
+        return m_frontLeft;
+
+      case FrontRight:
+        return m_frontRight;
+
+      default:
+        return null;
+    }
   }
 }
