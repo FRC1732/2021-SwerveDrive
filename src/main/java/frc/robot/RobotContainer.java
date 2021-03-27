@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.squareup.moshi.internal.NullSafeJsonAdapter;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -81,7 +83,7 @@ public class RobotContainer {
 
     // Declare subsystems
     s_drivetrain = new Drivetrain();
-    //s_drivetrain.setDefaultCommand(new DriveWithJoystick(null, null, null, null));
+    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, r_joystick, s_drivetrain, null));
     motorTestSubsystem = new MotorTestSubsystem();
     
     defineButtons();                // Define Buttons
