@@ -39,8 +39,7 @@ public class DriveWithJoystick extends CommandBase {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final double xSpeed =
-        m_xspeedLimiter.calculate(rightJoystick.getY())
-            * Drivetrain.kMaxSpeed;
+        m_xspeedLimiter.calculate(rightJoystick.getY())* Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
