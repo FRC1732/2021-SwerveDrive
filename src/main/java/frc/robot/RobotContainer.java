@@ -95,7 +95,7 @@ public class RobotContainer {
     s_drivetrain = new Drivetrain();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
     r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
-    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, r_joystick, s_drivetrain, null));
+    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, r_joystick, s_drivetrain, true));
     motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
     
     defineButtons();                // Define Buttons

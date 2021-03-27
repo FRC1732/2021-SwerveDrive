@@ -6,7 +6,9 @@ package frc.robot.drivers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.subsystems.Drivetrain;
@@ -26,6 +28,7 @@ public class SwerveModule {
 
   private final TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
+  private final CANEncoder m_turningEncoder;
 
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
@@ -44,7 +47,8 @@ public class SwerveModule {
    */
   public SwerveModule(int talonID, int sparkID) {
     m_driveMotor = new TalonFX(talonID);
-    m_turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
+    m_turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);    
+    m_turningMotor.restoreFactoryDefaults();
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -55,7 +59,10 @@ public class SwerveModule {
     // Set the distance (in this case, angle) per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * wpi::math::pi)
     // divided by the encoder resolution.
-    // m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+    m_turningEncoder = m_turningMotor.getEncoder(); // We think this is the quadature with 4096 res
+    m_turningEncoder.setPositionConversionFactor(2 * Math.PI / kEncoderResolution);
+    m_turningEncoder.setPosition(0);
+
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -85,11 +92,11 @@ public class SwerveModule {
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(m_turningMotor.getEncoder().getPosition(), state.angle.getRadians());
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
+    //m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
 
