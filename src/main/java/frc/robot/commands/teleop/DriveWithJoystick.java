@@ -48,20 +48,32 @@ public class DriveWithJoystick extends CommandBase {
     t1 = timer.get();
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    final double xSpeed = m_xspeedLimiter.calculate(rightJoystick.getY()) * Drivetrain.kMaxSpeed;
+    double y = rightJoystick.getY();
+
+    if (Math.abs(y) < 0.05)
+     y = 0;
+    
+    final double xSpeed = m_xspeedLimiter.calculate(y) * Drivetrain.kMaxSpeed;
 
     t2 = timer.get();
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    final double ySpeed = m_yspeedLimiter.calculate(rightJoystick.getX()) * Drivetrain.kMaxSpeed;
+
+    double x = leftJoystick.getX();
+
+    if (Math.abs(x) < 0.05)
+     x = 0;
+    
+    final double ySpeed = m_yspeedLimiter.calculate(x) * Drivetrain.kMaxSpeed;
 
     t3 = timer.get();
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
-    final double rot = m_rotLimiter.calculate(leftJoystick.getX()) * Drivetrain.kMaxAngularSpeed;
+
+    final double rot = m_rotLimiter.calculate(x) * Drivetrain.kMaxAngularSpeed;
 
     t4 = timer.get();
     m_swerve.drive(xSpeed, ySpeed, rot, false);
