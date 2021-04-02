@@ -68,7 +68,7 @@ public class RobotContainer {
   private JoystickButton r_button_11;
 
   // Operator Joysticks
-  private Joystick o_joystick;
+  // private Joystick o_joystick;
 
   // Operator1Joystick Buttons
   private JoystickButton o_button_1;
@@ -110,7 +110,7 @@ public class RobotContainer {
     // Driver joystick declaration
 
     // Operator joystick declaration
-    o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
+    // o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
 
     // Driver - Left joystick button declaration    
     l_button_1 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_1);
@@ -123,7 +123,7 @@ public class RobotContainer {
     l_button_8 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_8);
     l_button_9 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_9);
     l_button_10 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_10);
-    l_button_11 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_11);
+    // l_button_11 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_11);
 
     // Driver - Right joystick button declaration
     /*
@@ -141,18 +141,18 @@ public class RobotContainer {
     */
 
     // Operator - Joystick button declaration
-    o_button_1 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1);
-    o_button_2 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_2);
-    o_button_3 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_3);
-    o_button_4 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_4);
-    o_button_5 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_5);
-    o_button_6 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_6);
-    o_button_7 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_7);
-    o_button_8 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_8);
-    o_button_9 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_9);
-    o_button_10 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_10);
-    o_button_11 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_11);
-    o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12); 
+    // o_button_1 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1);
+    // o_button_2 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_2);
+    // o_button_3 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_3);
+    // o_button_4 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_4);
+    // o_button_5 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_5);
+    // o_button_6 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_6);
+    // o_button_7 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_7);
+    // o_button_8 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_8);
+    // o_button_9 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_9);
+    // o_button_10 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_10);
+    // o_button_11 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_11);
+    // o_button_12 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_12); 
 
     try{
       t_joystick = new Joystick(Constants.TEST_JOYSTICK_PORT_ID);
@@ -235,7 +235,7 @@ public class RobotContainer {
     tab.addBoolean("LB8", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_8)); 
     tab.addBoolean("LB9", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
     tab.addBoolean("LB10", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
-    tab.addBoolean("LB11", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
+    // tab.addBoolean("LB11", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
 
     /*
     tab.addNumber("Right X-axis", r_joystick::getX);
