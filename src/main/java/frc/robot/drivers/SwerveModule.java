@@ -27,6 +27,8 @@ public class SwerveModule {
   private final SwervePosition m_position;
   private static final double kWheelRadius = 0.0613;
   private static final int kEncoderResolution = 4096;
+  // Encoder returns revolutions; convert to radians; apply gear ratio
+  private static final double kEncoderConversion  = 1.0 * 2 * Math.PI * 53.3;
 
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -74,7 +76,7 @@ public class SwerveModule {
     // This is the the angle through an entire rotation (2 * wpi::math::pi)
     // divided by the encoder resolution.
     m_turningEncoder = m_turningMotor.getEncoder(); // We think this is the quadature with 4096 res
-    m_turningEncoder.setPositionConversionFactor(2 * Math.PI / kEncoderResolution);
+    m_turningEncoder.setPositionConversionFactor(kEncoderConversion);
     m_turningEncoder.setPosition(0);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
