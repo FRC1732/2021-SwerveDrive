@@ -27,8 +27,8 @@ public class SwerveModule {
   private final SwervePosition m_position;
   private static final double kWheelRadius = 0.0613;
   private static final int kEncoderResolution = 4096;
-  // Encoder returns revolutions; convert to radians; apply gear ratio
-  private static final double kEncoderConversion  = 1.0 * 2 * Math.PI * 53.3;
+  // Encoder returns revolutions; convert to radians; --apply gear ratio
+  private static final double kEncoderConversion  = 1.0 * 2 * Math.PI;//* 53.3;
 
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -88,7 +88,6 @@ public class SwerveModule {
   }
 
   private void initShuffleBoard(SwervePosition position) {
-    // String prefix = position.toString();
     ShuffleboardLayout layout = tab.getLayout(position.toString(), BuiltInLayouts.kList).withSize(2, 4);
 
     layout.addNumber("Encoder Position", m_turningEncoder::getPosition).withPosition(0, 0);
@@ -97,9 +96,7 @@ public class SwerveModule {
     layout.addNumber("Encoder Feed Forward", this::getTurnFeedforward).withPosition(0, 3);
     layout.addString("State", () -> this.getState().toString()).withPosition(0, 4);
     layout.addNumber("Encoder Target", () -> optimizedState.angle.getRadians()).withPosition(0, 5);
-    // layout.addNumber("Encoder Speed", m_turningMotor::get).withPosition(0, 1);
-
-  }
+   }
 
   /**
    * Returns the current state of the module.
