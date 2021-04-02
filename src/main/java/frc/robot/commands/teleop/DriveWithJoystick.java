@@ -15,7 +15,7 @@ public class DriveWithJoystick extends CommandBase {
   private Timer timer;
 
   private Joystick leftJoystick;
-  private Joystick rightJoystick;
+  //private Joystick rightJoystick;
   private Boolean fieldCentric;
   private Drivetrain m_swerve;
 
@@ -24,10 +24,10 @@ public class DriveWithJoystick extends CommandBase {
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
-  public DriveWithJoystick(Joystick leftJoystick, Joystick rightJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
+  public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
     addRequirements(drivetrain);
     this.leftJoystick = leftJoystick;
-    this.rightJoystick = rightJoystick;
+    //this.rightJoystick = rightJoystick;
     this.m_swerve = drivetrain;
     this.fieldCentric = fieldCentric;
 
@@ -43,48 +43,16 @@ public class DriveWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double t1, t2, t3, t4, t5;
 
-    t1 = timer.get();
-    // Get the x speed. We are inverting this because Xbox controllers return
-    // negative values when we push forward.
-    double y = rightJoystick.getY();
+    double forward = leftJoystick.getRawAxis(1);
+    double strafe = leftJoystick.getRawAxis(0);
+    double rotation = leftJoystick.getRawAxis(4);
 
-    if (Math.abs(y) < 0.05)
-     y = 0;
-    
-    final double xSpeed = m_xspeedLimiter.calculate(y) * Drivetrain.kMaxSpeed;
+    forward = Math.abs(forward) < 0.05? 0.0: forward;
+    strafe = Math.abs(strafe) < 0.05? 0.0: strafe;
+    rotation = Math.abs(rotation) < 0/05? 0.0: rotation;
 
-    t2 = timer.get();
-    // Get the y speed or sideways/strafe speed. We are inverting this because
-    // we want a positive value when we pull to the left. Xbox controllers
-    // return positive values when you pull to the right by default.
-
-    double x = leftJoystick.getX();
-
-    if (Math.abs(x) < 0.05)
-     x = 0;
-    
-    final double ySpeed = m_yspeedLimiter.calculate(x) * Drivetrain.kMaxSpeed;
-
-    t3 = timer.get();
-    // Get the rate of angular rotation. We are inverting this because we want a
-    // positive value when we pull to the left (remember, CCW is positive in
-    // mathematics). Xbox controllers return positive values when you pull to
-    // the right by default.
-
-    final double rot = m_rotLimiter.calculate(x) * Drivetrain.kMaxAngularSpeed;
-
-    t4 = timer.get();
-    m_swerve.drive(xSpeed, ySpeed, rot, false);
-
-    t5 = timer.get();
-    if (counter++ > 100) {
-      //System.out.println(String.format("Timers (%f) (%f) (%f) (%f)", t2 - t1, t3 - t2, t4 - t3, t5 - t4));
-      System.out.println(String.format("X/Y/Rot (%f) (%f) (%f)", xSpeed, ySpeed, rot));
-      counter = 0;
-    }
-
+    m_swerve.drive(forward, strafe, rotation, true);
   }
 
   // Called once the command ends or is interrupted.

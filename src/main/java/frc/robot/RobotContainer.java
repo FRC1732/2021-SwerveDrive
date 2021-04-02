@@ -19,7 +19,7 @@ public class RobotContainer {
   private SendableChooser autonomousModeOption;
   // Driver Joysticks
   private Joystick l_joystick;
-  private Joystick r_joystick;
+  //private Joystick r_joystick;
 
   // Autonomous Components
   private DriveDistance driveDistanceAuto;
@@ -94,8 +94,8 @@ public class RobotContainer {
     // Declare subsystems
     s_drivetrain = new Drivetrain();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
-    r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
-    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, r_joystick, s_drivetrain, true));
+    //r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
+    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
     motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
     
     defineButtons();                // Define Buttons
@@ -126,6 +126,7 @@ public class RobotContainer {
     l_button_11 = new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_11);
 
     // Driver - Right joystick button declaration
+    /*
     r_button_1 = new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_1);
     r_button_2 = new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_2);
     r_button_3 = new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_3);
@@ -137,6 +138,7 @@ public class RobotContainer {
     r_button_9 = new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_9);
     r_button_10 = new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_10);
     r_button_11 = new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_11);
+    */
 
     // Operator - Joystick button declaration
     o_button_1 = new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1);
@@ -235,6 +237,7 @@ public class RobotContainer {
     tab.addBoolean("LB10", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
     tab.addBoolean("LB11", () -> l_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
 
+    /*
     tab.addNumber("Right X-axis", r_joystick::getX);
     tab.addNumber("Right Y-axis", r_joystick::getY);
     tab.addNumber("Right Z-axis", r_joystick::getZ);
@@ -249,6 +252,7 @@ public class RobotContainer {
     tab.addBoolean("RB9", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_9)); 
     tab.addBoolean("RB10", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_10)); 
     tab.addBoolean("RB11", () -> r_joystick.getRawButton(Constants.L_JOYSTICKBUTTON_11)); 
+    */
   }
 
   private void defineAutonomousComponents() {
