@@ -27,7 +27,7 @@ public class SwerveModule {
   private final SwervePosition m_position;
   private static final double kWheelRadius = 0.0613;
   // Encoder returns revolutions; convert to radians; apply gear ratio
-  private static final double kEncoderConversion  = 1.0 * 2 * Math.PI / 53.3;
+  private static final double kEncoderConversion = 1.0 * 2 * Math.PI / 53.3;
 
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -72,7 +72,7 @@ public class SwerveModule {
     // kEncoderResolution);
 
     // Set the distance (in this case, angle) per pulse for the turning encoder.
-    m_turningEncoder = m_turningMotor.getEncoder(); 
+    m_turningEncoder = m_turningMotor.getEncoder();
     m_turningEncoder.setPositionConversionFactor(kEncoderConversion);
     m_turningEncoder.setPosition(0);
 
@@ -81,7 +81,7 @@ public class SwerveModule {
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     optimizedState = new SwerveModuleState();
 
-    initShuffleBoard(position);
+    initShuffleBoard(m_position);
   }
 
   private void initShuffleBoard(SwervePosition position) {
@@ -93,7 +93,10 @@ public class SwerveModule {
     layout.addNumber("Encoder Feed Forward", this::getTurnFeedforward).withPosition(0, 3);
     layout.addString("State", () -> this.getState().toString()).withPosition(0, 4);
     layout.addNumber("Encoder Target", () -> optimizedState.angle.getRadians()).withPosition(0, 5);
-   }
+    layout.addNumber("Drive Output", this::getDriveOutput).withPosition(0, 6);
+    layout.addNumber("Drive Feed Forward", this::getDriveFeedforward).withPosition(0, 7);
+    layout.addNumber("Drive Target", () -> optimizedState.speedMetersPerSecond).withPosition(0, 8);
+  }
 
   /**
    * Returns the current state of the module.
@@ -115,17 +118,15 @@ public class SwerveModule {
     optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getSelectedSensorVelocity(),
-    optimizedState.speedMetersPerSecond);
-
-    final double driveFeedforward = m_driveFeedforward.calculate(optimizedState.speedMetersPerSecond);
+    driveOutput = m_drivePIDController.calculate(m_driveMotor.getSelectedSensorVelocity(),
+        optimizedState.speedMetersPerSecond);
+    driveFeedforward = m_driveFeedforward.calculate(optimizedState.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), optimizedState.angle.getRadians());
-
     turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    // m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
+    m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
 
