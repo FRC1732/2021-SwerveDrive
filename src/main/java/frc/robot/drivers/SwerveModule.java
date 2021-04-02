@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 public class SwerveModule {
   private final SwervePosition m_position;
   private static final double kWheelRadius = 0.0613;
-  private static final int kEncoderResolution = 4096;
   // Encoder returns revolutions; convert to radians; apply gear ratio
   private static final double kEncoderConversion  = 1.0 * 2 * Math.PI / 53.3;
 
@@ -73,9 +72,7 @@ public class SwerveModule {
     // kEncoderResolution);
 
     // Set the distance (in this case, angle) per pulse for the turning encoder.
-    // This is the the angle through an entire rotation (2 * wpi::math::pi)
-    // divided by the encoder resolution.
-    m_turningEncoder = m_turningMotor.getEncoder(); // We think this is the quadature with 4096 res
+    m_turningEncoder = m_turningMotor.getEncoder(); 
     m_turningEncoder.setPositionConversionFactor(kEncoderConversion);
     m_turningEncoder.setPosition(0);
 
