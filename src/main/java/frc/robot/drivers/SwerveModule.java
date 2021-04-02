@@ -27,8 +27,8 @@ public class SwerveModule {
   private final SwervePosition m_position;
   private static final double kWheelRadius = 0.0613;
   private static final int kEncoderResolution = 4096;
-  // Encoder returns revolutions; convert to radians; --apply gear ratio
-  private static final double kEncoderConversion  = 1.0 * 2 * Math.PI;//* 53.3;
+  // Encoder returns revolutions; convert to radians; apply gear ratio
+  private static final double kEncoderConversion  = 1.0 * 2 * Math.PI / 53.3;
 
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
