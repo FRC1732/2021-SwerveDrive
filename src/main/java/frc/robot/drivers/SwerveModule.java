@@ -126,7 +126,7 @@ public class SwerveModule {
     turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), optimizedState.angle.getRadians());
     turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
+    //m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
 
