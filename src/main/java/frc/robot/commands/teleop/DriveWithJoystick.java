@@ -6,33 +6,25 @@ package frc.robot.commands.teleop;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 public class DriveWithJoystick extends CommandBase {
-  private int counter = 0;
-  private Timer timer;
-
   private Joystick leftJoystick;
-  //private Joystick rightJoystick;
+  // private Joystick rightJoystick;
   private Boolean fieldCentric;
-  private Drivetrain m_swerve;
+  private Drivetrain drivetrain;
 
-  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+  // Slew rate limiters to make joystick inputs more gentle; 1/4 sec from 0 to 1.
+  private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(4);
+  private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(4);
 
   public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
     addRequirements(drivetrain);
     this.leftJoystick = leftJoystick;
-    //this.rightJoystick = rightJoystick;
-    this.m_swerve = drivetrain;
+    // this.rightJoystick = rightJoystick;
+    this.drivetrain = drivetrain;
     this.fieldCentric = fieldCentric;
-
-    timer = new Timer();
-    timer.start();
   }
 
   // Called when the command is initially scheduled.
@@ -43,16 +35,16 @@ public class DriveWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // flip +/- to match drivetrain.drive
+    double forward = -leftJoystick.getRawAxis(1);
+    double strafe = -leftJoystick.getRawAxis(0);
+    double rotation = -leftJoystick.getRawAxis(2);
 
-    double forward = leftJoystick.getRawAxis(1);
-    double strafe = leftJoystick.getRawAxis(0);
-    double rotation = leftJoystick.getRawAxis(4);
+    forward = Math.abs(forward) < 0.05 ? 0.0 : forward;
+    strafe = Math.abs(strafe) < 0.05 ? 0.0 : strafe;
+    rotation = Math.abs(rotation) < 0 / 0.05 ? 0.0 : rotation;
 
-    forward = Math.abs(forward) < 0.05? 0.0: forward;
-    strafe = Math.abs(strafe) < 0.05? 0.0: strafe;
-    rotation = Math.abs(rotation) < 0/05? 0.0: rotation;
-
-    m_swerve.drive(forward, strafe, rotation, true);
+    drivetrain.drive(xspeedLimiter.calculate(forward), yspeedLimiter.calculate(strafe), rotation, fieldCentric);
   }
 
   // Called once the command ends or is interrupted.

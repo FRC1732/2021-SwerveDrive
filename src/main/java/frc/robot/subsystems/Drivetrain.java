@@ -19,75 +19,70 @@ import frc.robot.Constants;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  private static final double TRACKWIDTH = 18.85;
-  private static final double WHEELBASE = 15.173;
+  private static final double TRACKWIDTH = 0.479; // in meters
+    private static final double WHEELBASE = 0.385; // in meters
 
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+  // Translation2Ds are in meters
+  private final Translation2d frontLeftLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0);
+  private final Translation2d frontRightLocation = new Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
+  private final Translation2d backLeftLocation = new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0);
+  private final Translation2d backRightLocation = new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0);
-  // Translation2d(0.193, 0.193);
-  private final Translation2d m_frontRightLocation = new Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
-  // Translation2d(0.193, -0.193);
-  private final Translation2d m_backLeftLocation = new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0);
-  // Translation2d(-0.193, 0.193);
-  private final Translation2d m_backRightLocation = new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
-  // Translation2d(-0.193, -0.193);
+  private final Gyro gyro = new AHRS(SPI.Port.kMXP);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
+  private final SwerveModule frontLeft = new SwerveModule(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
       Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, SwervePosition.BackRight);
-  private final SwerveModule m_frontRight = new SwerveModule(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
+  private final SwerveModule frontRight = new SwerveModule(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
       Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, SwervePosition.FrontRight);
-  private final SwerveModule m_backLeft = new SwerveModule(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
+  private final SwerveModule backLeft = new SwerveModule(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
       Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, SwervePosition.BackLeft);
-  private final SwerveModule m_backRight = new SwerveModule(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
+  private final SwerveModule backRight = new SwerveModule(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
       Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, SwervePosition.FrontLeft);
 
-  private final Gyro m_gyro;
-
-  /*
-   * private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-   * new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0), new
-   * Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0), new
-   * Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0), new
-   * Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0) );
-   */
-
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation,
-      m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(frontLeftLocation,
+      frontRightLocation, backLeftLocation, backRightLocation);
 
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, new Rotation2d());
 
   public Drivetrain() {
-    m_gyro = new AHRS(SPI.Port.kMXP);
-    m_gyro.reset();
+    gyro.reset();
   }
 
   /**
-   * Method to drive the robot using joystick info.
-   *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field.
+   * Joystick inputs to drive the robot.
+   * 
+   * @param forward       Forward (1) or backward (-1) speed with zero being no
+   *                      movement
+   * @param strafe        Left (1) or right (-1) movement control with zero being
+   *                      no strafe
+   * @param rotate        CCW (1) or CW (-1) rotation with zero being no rotation
+   * @param fieldRelative Used with Odometry, set true in autonmous mode, false
+   *                      otherwise
    */
-  @SuppressWarnings("ParameterName")
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void drive(double forward, double strafe, double rotate, boolean fieldRelative) {
+
+    // joy stick values to velocity values; multiple by MAX'es
+    // Maybe this method should take in velocity values instead of joystick values?
+    double adjustedForward = forward * Constants.MAX_SPEED;
+    double adjustedStrafe = strafe * Constants.MAX_SPEED;
+    double adjustedRotate = rotate * Constants.MAX_ANGULAR_VELOCITY;
+
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
-        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, kMaxSpeed);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedForward, adjustedStrafe, adjustedRotate, gyro.getRotation2d())
+            : new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
+    // This will make sure speeds do not exceed maxium and adjust all wheels if
+        // necessary.
+        SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.MAX_SPEED);
+        frontLeft.setDesiredState(swerveModuleStates[0]);
+        frontRight.setDesiredState(swerveModuleStates[1]);
+        backLeft.setDesiredState(swerveModuleStates[2]);
+        backRight.setDesiredState(swerveModuleStates[3]);
   }
 
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
-    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
-        m_backRight.getState());
+    m_odometry.update(gyro.getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
+        backRight.getState());
   }
 
   // Stops the motors from
@@ -95,22 +90,5 @@ public class Drivetrain extends SubsystemBase {
     drive(0, 0, 0, false);
   }
 
-  public SwerveModule getByPosition(SwervePosition position) {
-    switch (position) {
-      case BackLeft:
-        return m_backLeft;
 
-      case BackRight:
-        return m_backRight;
-
-      case FrontLeft:
-        return m_frontLeft;
-
-      case FrontRight:
-        return m_frontRight;
-
-      default:
-        return null;
-    }
-  }
 }
