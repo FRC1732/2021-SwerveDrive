@@ -15,6 +15,12 @@ public abstract class AbstractSwerveModule {
     private final SwervePosition swervePosition;
     private ShuffleboardTab tab = Shuffleboard.getTab("Swerve Modules");
 
+    // guessing at a max RPM to equate to max speed; really this is mechanical math,
+    // a wheel turning to an encoder result in a 100ms period
+    // 6000 RPM --> 4.0 m/s
+    // RPM * encoder resolution / number of 100ms in a minute
+    protected final double MAX_VELOCITY_PER_100MS = 6000.0 * 2048.0 / 600.0;
+
     public AbstractSwerveModule(SwervePosition swervePosition) {
         this.swervePosition = swervePosition;
 
@@ -30,31 +36,20 @@ public abstract class AbstractSwerveModule {
         layout.addNumber("Turn Motor Output (V)", this::getTurnMotorOutputLevel);
         layout.addNumber("Turn Motor FF (V)", this::getTurnMotorFeedForward);
 
-        // layout.addNumber("Drive Position (m-s)", this::getDrivePosition);
-        // layout.addNumber("Drive Target (m-s)", this::getDriveTarget);
-        // layout.addNumber("Drive Motor Voltage (V)", this::getDriveMotorVoltage);
-        // layout.addNumber("Drive Motor Output (m-s)", this::getDriveMotorOutputLevel);
-        // layout.addNumber("Drive Motor FF (m-s)", this::getDriveMotorFeedForward);
+        layout.addNumber("Drive Position (m-s)", this::getDrivePosition);
+        layout.addNumber("Drive Target (m-s)", this::getDriveTarget);
+        layout.addNumber("Drive Motor Voltage (V)", this::getDriveMotorVoltage);
+        layout.addNumber("Drive Motor Output (m-s)", this::getDriveMotorOutputLevel);
+        layout.addNumber("Drive Motor FF (m-s)", this::getDriveMotorFeedForward);
     }
 
     protected double convertMotorVelocityToMetersSecond(double motorVelocity) {
-        // guessing at a max RPM to equate to max speed; really this is mechanical math,
-        // a wheel turning to an encoder result in a 100ms period
-        // 6000 RPM --> 4.0 m/s
-        // RPM * encoder resolution / number of 100ms in a minute
-        double maxVelocityUnitsPer100ms = 6000.0 * 2048.0 / 600.0;
-        return motorVelocity * Constants.MAX_SPEED / maxVelocityUnitsPer100ms;
+        return motorVelocity * Constants.MAX_SPEED / MAX_VELOCITY_PER_100MS;
     }
 
     protected double convertMetersPerSecondToMotorVelocity(double metersPerSecond) {
-        // guessing at a max RPM to equate to max speed; really this is mechanical math,
-        // a wheel turning to an encoder result in a 100ms period
-        // 6000 RPM --> 4.0 m/s
-        // RPM * encoder resolution / number of 100ms in a minute
-        double maxVelocityUnitsPer100ms = 6000.0 * 2048.0 / 600.0;
-        return metersPerSecond * maxVelocityUnitsPer100ms / Constants.MAX_SPEED;
+        return metersPerSecond * MAX_VELOCITY_PER_100MS / Constants.MAX_SPEED;
     }
-
 
     abstract double getTurnPosition();
 

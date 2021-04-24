@@ -19,8 +19,8 @@ import frc.robot.Constants;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  private static final double TRACKWIDTH = 0.479; // in meters
-    private static final double WHEELBASE = 0.385; // in meters
+  private static final double TRACKWIDTH = 0.3854; // in meters
+  private static final double WHEELBASE = 0.3854; // in meters
 
   // Translation2Ds are in meters
   private final Translation2d frontLeftLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0);
@@ -39,8 +39,8 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveModule backRight = new SwerveModule(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
       Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, SwervePosition.FrontLeft);
 
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(frontLeftLocation,
-      frontRightLocation, backLeftLocation, backRightLocation);
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation,
+      backLeftLocation, backRightLocation);
 
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, new Rotation2d());
 
@@ -60,23 +60,23 @@ public class Drivetrain extends SubsystemBase {
    *                      otherwise
    */
   public void drive(double forward, double strafe, double rotate, boolean fieldRelative) {
-
     // joy stick values to velocity values; multiple by MAX'es
     // Maybe this method should take in velocity values instead of joystick values?
     double adjustedForward = forward * Constants.MAX_SPEED;
     double adjustedStrafe = strafe * Constants.MAX_SPEED;
     double adjustedRotate = rotate * Constants.MAX_ANGULAR_VELOCITY;
 
-    var swerveModuleStates = m_kinematics.toSwerveModuleStates(
-        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedForward, adjustedStrafe, adjustedRotate, gyro.getRotation2d())
-            : new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
+    var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedForward, adjustedStrafe, adjustedRotate, gyro.getRotation2d())
+        : new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
+
     // This will make sure speeds do not exceed maxium and adjust all wheels if
-        // necessary.
-        SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.MAX_SPEED);
-        frontLeft.setDesiredState(swerveModuleStates[0]);
-        frontRight.setDesiredState(swerveModuleStates[1]);
-        backLeft.setDesiredState(swerveModuleStates[2]);
-        backRight.setDesiredState(swerveModuleStates[3]);
+    // necessary.
+    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.MAX_SPEED);
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    backLeft.setDesiredState(swerveModuleStates[2]);
+    backRight.setDesiredState(swerveModuleStates[3]);
   }
 
   /** Updates the field relative position of the robot. */
@@ -89,6 +89,5 @@ public class Drivetrain extends SubsystemBase {
   public void stop() {
     drive(0, 0, 0, false);
   }
-
 
 }

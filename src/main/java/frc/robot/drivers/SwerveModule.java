@@ -5,7 +5,10 @@
 package frc.robot.drivers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -49,8 +52,14 @@ public class SwerveModule extends AbstractSwerveModule {
   public SwerveModule(int talonID, int sparkID, SwervePosition position) {
     super(position);
 
+    TalonFXConfiguration talonConfig = new TalonFXConfiguration();
+    talonConfig.peakOutputForward = 1.0;
+    talonConfig.peakOutputReverse = 1.0;
+    talonConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+
     driveMotor = new TalonFX(talonID);
-    // need motor config here.
+    driveMotor.configAllSettings(talonConfig, 100);
+    driveMotor.setNeutralMode(NeutralMode.Coast);
 
     turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     turningMotor.restoreFactoryDefaults();
@@ -83,18 +92,9 @@ public class SwerveModule extends AbstractSwerveModule {
     // Rotation2d(turningEncoder.getPosition()));
     optimizedState = desiredState; // no optimization
 
-    // Calculate the drive output from the drive PID controller.
-    // driveMotorActual =
-    // convertMotorVelocityToMetersSecond(driveMotor.getSelectedSensorVelocity());
-    // driveMotorOutput = drivePIDController.calculate(driveMotorActual,
-    // optimizedState.speedMetersPerSecond);
-    // driveMotorFeedforward =
-    // driveFeedforward.calculate(optimizedState.speedMetersPerSecond);
-
     driveMotorInput = convertMetersPerSecondToMotorVelocity(optimizedState.speedMetersPerSecond);
     // driveMotor.set(ControlMode.Velocity, driveMotorInput);
-    double d = 6000.0 * 2048.0 / 600.0;
-    driveMotor.set(ControlMode.PercentOutput, driveMotorInput / d);
+    driveMotor.set(ControlMode.PercentOutput, driveMotorInput / MAX_VELOCITY_PER_100MS);
 
     turnOutput = turningPIDController.calculate(turningEncoder.getPosition(), optimizedState.angle.getRadians());
     turnFFVoltage = turnMotorFeedforward.calculate(turningPIDController.getSetpoint().velocity);
