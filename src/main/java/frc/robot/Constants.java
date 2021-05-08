@@ -31,8 +31,8 @@ public final class Constants {
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE = 4;
     public static final int DRIVETRAIN_BACK_LEFT_DRIVE = 5;
 
-    public static final int DRIVETRAIN_INTAKE = 23;
-    public static final double INTAKE_SPEED = 0.7;
+    //================== Subsystem ::: Intake ==================
+    public static final int INTAKE = 23;
 
     //================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;

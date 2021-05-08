@@ -11,6 +11,7 @@ import frc.robot.commands.teleop.DriveWithJoystick;
 import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.MotorTestSubsystem;
+import frc.robot.subsystems.Intake;
 
 public class RobotContainer {
   public static Drivetrain s_drivetrain;

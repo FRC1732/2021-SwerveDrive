@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 
 public class DriveWithJoystick extends CommandBase {
   private int counter = 0;
@@ -18,6 +19,7 @@ public class DriveWithJoystick extends CommandBase {
   //private Joystick rightJoystick;
   private Boolean fieldCentric;
   private Drivetrain m_swerve;
+  private Intake intake = new Intake();
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -30,6 +32,7 @@ public class DriveWithJoystick extends CommandBase {
     //this.rightJoystick = rightJoystick;
     this.m_swerve = drivetrain;
     this.fieldCentric = fieldCentric;
+    this.intake = new Intake();
 
     timer = new Timer();
     timer.start();
@@ -48,13 +51,15 @@ public class DriveWithJoystick extends CommandBase {
     double strafe = leftJoystick.getRawAxis(0);
     double rotation = leftJoystick.getRawAxis(4);
     
-    boolean intake = leftJoystick.getTrigger();
+    boolean intakeOn = leftJoystick.getTrigger();
 
     forward = Math.abs(forward) < 0.05? 0.0: forward;
     strafe = Math.abs(strafe) < 0.05? 0.0: strafe;
     rotation = Math.abs(rotation) < 0/05? 0.0: rotation;
 
-    m_swerve.drive(forward, strafe, rotation, true, intake);
+    m_swerve.drive(forward, strafe, rotation, true);
+    intake.takeIn(intakeOn);
+
   }
 
   // Called once the command ends or is interrupted.

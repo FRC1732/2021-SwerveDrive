@@ -17,10 +17,6 @@ import frc.robot.drivers.SwerveModule;
 import frc.robot.drivers.SwervePosition;
 import frc.robot.Constants;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANEncoder;
-
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
   private static final double TRACKWIDTH = 18.85;
@@ -28,8 +24,6 @@ public class Drivetrain extends SubsystemBase {
 
   public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
-  private static final double kEncoderConversion = 1.0 * 2 * Math.PI / 53.3;
 
   private final Translation2d m_frontLeftLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0);
   // Translation2d(0.193, 0.193);
@@ -51,9 +45,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final Gyro m_gyro;
 
-  private final CANSparkMax intakeMotor;
-  private final CANEncoder intakeEncoder;
-
   /*
    * private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
    * new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0), new
@@ -70,13 +61,6 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_gyro.reset();
-
-    intakeMotor = new CANSparkMax(Constants.DRIVETRAIN_INTAKE, MotorType.kBrushless);
-    intakeMotor.restoreFactoryDefaults();
-
-    intakeEncoder = intakeMotor.getEncoder();
-    intakeEncoder.setPositionConversionFactor(kEncoderConversion);
-    intakeEncoder.setPosition(0);
   }
 
   /**
@@ -89,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
    *                      field.
    */
   @SuppressWarnings("ParameterName")
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean intake) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
@@ -98,11 +82,6 @@ public class Drivetrain extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
-
-    if (intake)
-      intakeMotor.set(Constants.INTAKE_SPEED);
-    else
-      intakeMotor.set(0);
   }
 
   /** Updates the field relative position of the robot. */
@@ -113,7 +92,7 @@ public class Drivetrain extends SubsystemBase {
 
   // Stops the motors from
   public void stop() {
-    drive(0, 0, 0, false, false);
+    drive(0, 0, 0, false);
   }
 
   public SwerveModule getByPosition(SwervePosition position) {
