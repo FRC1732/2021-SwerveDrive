@@ -37,7 +37,7 @@ public class DriveDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(0.25, 0.25, 0, false);
+    drivetrain.drive(0.25, 0.25, 0, false, false);
 
   }
 

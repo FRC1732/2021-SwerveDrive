@@ -47,12 +47,14 @@ public class DriveWithJoystick extends CommandBase {
     double forward = leftJoystick.getRawAxis(1);
     double strafe = leftJoystick.getRawAxis(0);
     double rotation = leftJoystick.getRawAxis(4);
+    
+    boolean intake = leftJoystick.getTrigger();
 
     forward = Math.abs(forward) < 0.05? 0.0: forward;
     strafe = Math.abs(strafe) < 0.05? 0.0: strafe;
     rotation = Math.abs(rotation) < 0/05? 0.0: rotation;
 
-    m_swerve.drive(forward, strafe, rotation, true);
+    m_swerve.drive(forward, strafe, rotation, true, intake);
   }
 
   // Called once the command ends or is interrupted.
