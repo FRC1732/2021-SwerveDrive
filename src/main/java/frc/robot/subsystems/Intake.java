@@ -16,24 +16,22 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private static final double kEncoderConversion = 1.0 * 2 * Math.PI / 53.3;
-  private static final double motorSpeed = -0.7;
+  //private static final double kEncoderConversion = 1.0 * 2 * Math.PI / 53.3;
 
-  private CANSparkMax intakeMotor = new CANSparkMax(Constants.INTAKE, MotorType.kBrushless);
-  private CANEncoder intakeEncoder;
+  private CANSparkMax intakeMotor;
+  //private CANEncoder intakeEncoder;
   
-  public void Intake() {
-    intakeEncoder = intakeMotor.getEncoder();
-    intakeEncoder.setPositionConversionFactor(kEncoderConversion);
-    intakeEncoder.setPosition(0);
+  public Intake() {
+    intakeMotor = new CANSparkMax(Constants.INTAKE, MotorType.kBrushless);
   }
 
   @SuppressWarnings("ParameterName")
   public void takeIn(boolean run) {
     if (run)
-      intakeMotor.set(motorSpeed);
+      intakeMotor.set(Constants.MOTOR_SPEED);
     else
       intakeMotor.set(0);
+    //System.out.println("run");
   }
 
   public CANSparkMax getMotor() {

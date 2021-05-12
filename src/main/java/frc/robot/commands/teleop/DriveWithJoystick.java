@@ -19,20 +19,22 @@ public class DriveWithJoystick extends CommandBase {
   //private Joystick rightJoystick;
   private Boolean fieldCentric;
   private Drivetrain m_swerve;
-  private Intake intake = new Intake();
+  private Intake intake;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
-  public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
+  public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric, Intake intake) {
     addRequirements(drivetrain);
+   // addRequirements(intake);
+    
     this.leftJoystick = leftJoystick;
     //this.rightJoystick = rightJoystick;
     this.m_swerve = drivetrain;
     this.fieldCentric = fieldCentric;
-    this.intake = new Intake();
+    this.intake = intake;
 
     timer = new Timer();
     timer.start();

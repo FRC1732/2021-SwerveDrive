@@ -33,6 +33,7 @@ public final class Constants {
 
     //================== Subsystem ::: Intake ==================
     public static final int INTAKE = 23;
+    public static final double MOTOR_SPEED = -0.7;
 
     //================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;

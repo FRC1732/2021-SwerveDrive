@@ -63,7 +63,7 @@ public class SwerveModule {
     m_position = position;
     m_driveMotor = new TalonFX(talonID);
     m_turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
-    m_turningMotor.restoreFactoryDefaults();
+    //m_turningMotor.restoreFactoryDefaults();
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
