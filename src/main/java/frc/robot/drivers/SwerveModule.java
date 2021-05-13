@@ -5,53 +5,43 @@
 package frc.robot.drivers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import frc.robot.subsystems.Drivetrain;
-import edu.wpi.first.wpilibj.Encoder;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
-public class SwerveModule {
-  private final SwervePosition m_position;
-  private static final double kWheelRadius = 0.0613;
+public class SwerveModule extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
-  private static final double kEncoderConversion = 1.0 * 2 * Math.PI / 53.3;
+  private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI / 53.3;
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
-  private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+  private final TalonFX driveMotor;
+  private final CANSparkMax turningMotor;
+  private final CANEncoder turningEncoder;
 
-  private final TalonFX m_driveMotor;
-  private final CANSparkMax m_turningMotor;
-  private final CANEncoder m_turningEncoder;
+  // no PID on drive, just direct control but will use a slew.
+  // private final PIDController drivePIDController = new PIDController(1, 0, 0);
+  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(0.5, 0.1, 0.02,
+      new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_VELOCITY, Constants.MAX_ANGULAR_ACCELERATION));
 
-  private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
+  // private final SimpleMotorFeedforward driveMotorFeedforward = new
+  // SimpleMotorFeedforward(1, 3);
+  private final SimpleMotorFeedforward turnMotorFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
-  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,
-      new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
-
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
-
-  private ShuffleboardTab tab = Shuffleboard.getTab("Swerve Modules");
-
-  private double driveOutput;
-  private double driveFeedforward;
-  private double turnOutput;
-  private double turnFeedforward;
   private SwerveModuleState optimizedState;
+  private double driveMotorInput;
+  private double driveMotorOutput;
+  private double driveMotorFeedforward;
+  private double turnOutput;
+  private double turnFFVoltage;
 
   /**
    * Constructs a SwerveModule.
@@ -60,42 +50,25 @@ public class SwerveModule {
    * @param turningMotorChannel ID for the turning motor.
    */
   public SwerveModule(int talonID, int sparkID, SwervePosition position) {
-    m_position = position;
-    m_driveMotor = new TalonFX(talonID);
-    m_turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
-    //m_turningMotor.restoreFactoryDefaults();
+    super(position);
 
-    // Set the distance per pulse for the drive encoder. We can simply use the
-    // distance traveled for one rotation of the wheel divided by the encoder
-    // resolution.
-    // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius /
-    // kEncoderResolution);
+    TalonFXConfiguration talonConfig = new TalonFXConfiguration();
+    talonConfig.peakOutputForward = 1.0;
+    talonConfig.peakOutputReverse = 1.0;
+    talonConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
 
-    // Set the distance (in this case, angle) per pulse for the turning encoder.
-    m_turningEncoder = m_turningMotor.getEncoder();
-    m_turningEncoder.setPositionConversionFactor(kEncoderConversion);
-    m_turningEncoder.setPosition(0);
+    driveMotor = new TalonFX(talonID);
+    driveMotor.configAllSettings(talonConfig, 100);
+    driveMotor.setNeutralMode(NeutralMode.Coast);
 
-    // Limit the PID Controller's input range between -pi and pi and set the input
-    // to be continuous.
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
+    turningMotor.restoreFactoryDefaults();
+    turningEncoder = turningMotor.getEncoder();
+    turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
+    turningEncoder.setPosition(0);
+
     optimizedState = new SwerveModuleState();
-
-    initShuffleBoard(m_position);
-  }
-
-  private void initShuffleBoard(SwervePosition position) {
-    ShuffleboardLayout layout = tab.getLayout(position.toString(), BuiltInLayouts.kList).withSize(2, 4);
-
-    layout.addNumber("Encoder Position", m_turningEncoder::getPosition).withPosition(0, 0);
-    layout.addNumber("Encoder Speed", m_turningMotor::get).withPosition(0, 1);
-    layout.addNumber("Encoder Output", this::getTurnOutput).withPosition(0, 2);
-    layout.addNumber("Encoder Feed Forward", this::getTurnFeedforward).withPosition(0, 3);
-    layout.addString("State", () -> this.getState().toString()).withPosition(0, 4);
-    layout.addNumber("Encoder Target", () -> optimizedState.angle.getRadians()).withPosition(0, 5);
-    layout.addNumber("Drive Output", this::getDriveOutput).withPosition(0, 6);
-    layout.addNumber("Drive Feed Forward", this::getDriveFeedforward).withPosition(0, 7);
-    layout.addNumber("Drive Target", () -> optimizedState.speedMetersPerSecond).withPosition(0, 8);
+    turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   /**
@@ -104,8 +77,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getSelectedSensorVelocity(),
-        new Rotation2d(m_turningEncoder.getPosition()));
+    return new SwerveModuleState(driveMotor.getSelectedSensorVelocity(), new Rotation2d(turningEncoder.getPosition()));
   }
 
   /**
@@ -114,44 +86,69 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    // Optimize the reference state to avoid spinning further than 90 degrees
-    optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
+    // optimize will cause the modules to flip when going past +/-90 degrees
+    // (East/West). I am not sure we want that but its going to be a driver decision
+    // optimizedState = SwerveModuleState.optimize(desiredState, new
+    // Rotation2d(turningEncoder.getPosition()));
+    optimizedState = desiredState; // no optimization
 
-    // Calculate the drive output from the drive PID controller.
-    driveOutput = m_drivePIDController.calculate(m_driveMotor.getSelectedSensorVelocity(),
-        optimizedState.speedMetersPerSecond);
-    driveFeedforward = m_driveFeedforward.calculate(optimizedState.speedMetersPerSecond);
+    driveMotorInput = convertMetersPerSecondToMotorVelocity(optimizedState.speedMetersPerSecond);
+    // driveMotor.set(ControlMode.Velocity, driveMotorInput);
+    driveMotor.set(ControlMode.PercentOutput, driveMotorInput / MAX_VELOCITY_PER_100MS);
 
-    // Calculate the turning motor output from the turning PID controller.
-    turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), optimizedState.angle.getRadians());
-    turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    turnOutput = turningPIDController.calculate(turningEncoder.getPosition(), optimizedState.angle.getRadians());
+    turnFFVoltage = turnMotorFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
-    //m_driveMotor.set(ControlMode.PercentOutput, driveOutput + driveFeedforward);
-    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+    turningMotor.setVoltage(turnOutput + turnFFVoltage);
   }
 
-  public TalonFX getDriveMotor() {
-    return m_driveMotor;
+  @Override
+  double getTurnPosition() {
+    return turningEncoder.getPosition();
   }
 
-  public CANSparkMax getTurningMotor() {
-    return m_turningMotor;
+  @Override
+  double getTurnTarget() {
+    return optimizedState.angle.getRadians();
   }
 
-  public double getDriveOutput() {
-    return driveOutput;
+  @Override
+  double getTurnMotorVoltage() {
+    return turningMotor.getBusVoltage() * turningMotor.get();
   }
 
-  public double getDriveFeedforward() {
-    return driveFeedforward;
-  }
-
-  public double getTurnOutput() {
+  @Override
+  double getTurnMotorOutputLevel() {
     return turnOutput;
   }
 
-  public double getTurnFeedforward() {
-    return turnFeedforward;
+  @Override
+  double getTurnMotorFeedForward() {
+    return turnFFVoltage;
   }
 
+  @Override
+  double getDrivePosition() {
+    return driveMotor.getSensorCollection().getIntegratedSensorVelocity();
+  }
+
+  @Override
+  double getDriveTarget() {
+    return optimizedState.speedMetersPerSecond;
+  }
+
+  @Override
+  double getDriveMotorVoltage() {
+    return driveMotor.getMotorOutputVoltage();
+  }
+
+  @Override
+  double getDriveMotorOutputLevel() {
+    return driveMotorOutput;
+  }
+
+  @Override
+  double getDriveMotorFeedForward() {
+    return driveMotorFeedforward;
+  }
 }

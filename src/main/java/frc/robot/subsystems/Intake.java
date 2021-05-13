@@ -4,12 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANEncoder;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -25,7 +22,6 @@ public class Intake extends SubsystemBase {
     intakeMotor = new CANSparkMax(Constants.INTAKE, MotorType.kBrushless);
   }
 
-  @SuppressWarnings("ParameterName")
   public void takeIn(boolean run) {
     if (run)
       intakeMotor.set(Constants.MOTOR_SPEED);

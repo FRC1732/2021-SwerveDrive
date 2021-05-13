@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -50,7 +49,7 @@ public final class Constants {
     public static final int L_JOYSTICKBUTTON_11 = 11;
     public static final int L_JOYSTICKBUTTON_12 = 12;
 
-    //================== Driver ::: Right Joystick ::: Mapping ==================
+    // ================== Driver ::: Right Joystick ::: Mapping ==================
     public static final int RIGHT_JOYSTICK_PORT_ID = 1;
     public static final int R_JOYSTICKBUTTON_1 = 1;
     public static final int R_JOYSTICKBUTTON_2 = 2;
@@ -65,7 +64,7 @@ public final class Constants {
     public static final int R_JOYSTICKBUTTON_11 = 11;
     public static final int R_JOYSTICKBUTTON_12 = 12;
 
-    //================== Operator ::: Joystick ::: Mapping ==================
+    // ================== Operator ::: Joystick ::: Mapping ==================
     public static final int OPERATOR_JOYSTICK_PORT_ID = 2;
     public static final int O_JOYSTICKBUTTON_1 = 1;
     public static final int O_JOYSTICKBUTTON_2 = 2;
@@ -80,7 +79,7 @@ public final class Constants {
     public static final int O_JOYSTICKBUTTON_11 = 11;
     public static final int O_JOYSTICKBUTTON_12 = 12;
 
-    //================== Test ::: Joystick ::: Mapping ==================
+    // ================== Test ::: Joystick ::: Mapping ==================
     public static final int TEST_JOYSTICK_PORT_ID = 3;
     public static final int T_JOYSTICKBUTTON_1 = 1;
     public static final int T_JOYSTICKBUTTON_2 = 2;
@@ -95,5 +94,9 @@ public final class Constants {
     public static final int T_JOYSTICKBUTTON_11 = 11;
     public static final int T_JOYSTICKBUTTON_12 = 12;
 
-}
+    public static final double MAX_SPEED = 4.0; // 4.0 meters per second (under the theoretical max of 15.9 ft/s
+    // provided by mechanical)
+    public static final double MAX_ANGULAR_VELOCITY = Math.PI; // radians per second
+    public static final double MAX_ANGULAR_ACCELERATION = 2 * Math.PI; // radians per second squared
 
+}
