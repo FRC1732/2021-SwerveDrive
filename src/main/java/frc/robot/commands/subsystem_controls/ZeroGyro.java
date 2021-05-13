@@ -5,7 +5,6 @@
 package frc.robot.commands.subsystem_controls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 
 public class ZeroGyro extends CommandBase {
   /** Creates a new ZeroGyro. */
