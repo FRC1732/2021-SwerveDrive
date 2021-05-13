@@ -11,10 +11,12 @@ import frc.robot.commands.teleop.DriveWithJoystick;
 import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.MotorTestSubsystem;
+import frc.robot.subsystems.Intake;
 
 public class RobotContainer {
   public static Drivetrain s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
+  public static Intake intake;
 
   private SendableChooser autonomousModeOption;
   // Driver Joysticks
@@ -95,7 +97,11 @@ public class RobotContainer {
     s_drivetrain = new Drivetrain();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
     //r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
-    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
+    intake = new Intake();
+    
+    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true, intake));
+   // intake.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true, intake));
+
     motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
     
     defineButtons();                // Define Buttons

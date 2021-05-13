@@ -18,19 +18,23 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-    // ================== Subsystem ::: Drivetrain ==================
-    public static final int DRIVETRAIN_BACK_RIGHT_AZIMUTH = 6;
-    public static final int DRIVETRAIN_FRONT_RIGHT_AZIMUTH = 7;
-    public static final int DRIVETRAIN_BACK_LEFT_AZIMUTH = 8;
-    public static final int DRIVETRAIN_FRONT_LEFT_AZIMUTH = 9;
-
+  
+    //================== Subsystem ::: Drivetrain ==================
+    public static final int DRIVETRAIN_BACK_RIGHT_AZIMUTH = 19;
+    public static final int DRIVETRAIN_FRONT_RIGHT_AZIMUTH = 17;
+    public static final int DRIVETRAIN_BACK_LEFT_AZIMUTH = 18;
+    public static final int DRIVETRAIN_FRONT_LEFT_AZIMUTH = 16;
+     
     public static final int DRIVETRAIN_BACK_RIGHT_DRIVE = 2;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE = 3;
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE = 4;
     public static final int DRIVETRAIN_BACK_LEFT_DRIVE = 5;
 
-    // ================== Driver ::: Left Joystick ::: Mapping ==================
+    //================== Subsystem ::: Intake ==================
+    public static final int INTAKE = 23;
+    public static final double MOTOR_SPEED = -0.7;
+
+    //================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;
     public static final int L_JOYSTICKBUTTON_1 = 1;
     public static final int L_JOYSTICKBUTTON_2 = 2;

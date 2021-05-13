@@ -8,23 +8,27 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 
 public class DriveWithJoystick extends CommandBase {
   private Joystick leftJoystick;
   // private Joystick rightJoystick;
   private Boolean fieldCentric;
   private Drivetrain drivetrain;
+  private Intake intake;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/4 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(4);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(4);
 
-  public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
-    addRequirements(drivetrain);
+  public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric, Intake intake) {
+    addRequirements(drivetrain, intake);
+    
     this.leftJoystick = leftJoystick;
     // this.rightJoystick = rightJoystick;
     this.drivetrain = drivetrain;
     this.fieldCentric = fieldCentric;
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -45,6 +49,9 @@ public class DriveWithJoystick extends CommandBase {
     rotation = Math.abs(rotation) < 0 / 0.05 ? 0.0 : rotation;
 
     drivetrain.drive(xspeedLimiter.calculate(forward), yspeedLimiter.calculate(strafe), rotation, fieldCentric);
+    
+    boolean intakeOn = leftJoystick.getTrigger();
+    intake.takeIn(intakeOn);
   }
 
   // Called once the command ends or is interrupted.
