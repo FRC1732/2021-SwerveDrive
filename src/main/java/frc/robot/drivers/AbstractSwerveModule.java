@@ -70,4 +70,6 @@ public abstract class AbstractSwerveModule {
     abstract double getDriveMotorOutputLevel();
 
     abstract double getDriveMotorFeedForward();
+
+    abstract void setStartPosition();
 }

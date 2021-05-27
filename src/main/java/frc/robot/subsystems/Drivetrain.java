@@ -90,4 +90,12 @@ public class Drivetrain extends SubsystemBase {
     drive(0, 0, 0, false);
   }
 
+  public void setStartPosition() {
+    gyro.reset();
+    frontLeft.setStartPosition();
+    frontRight.setStartPosition();
+    backLeft.setStartPosition();
+    backRight.setStartPosition();
+  }
+
 }

@@ -165,4 +165,8 @@ public class RobotContainer {
     return (Command) autonomousModeOption.getSelected();
   }
 
+  public void setStartPosition() {
+    s_drivetrain.setStartPosition();
+  }
+
 }

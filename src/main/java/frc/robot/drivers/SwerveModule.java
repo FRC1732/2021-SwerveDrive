@@ -151,4 +151,10 @@ public class SwerveModule extends AbstractSwerveModule {
   double getDriveMotorFeedForward() {
     return driveMotorFeedforward;
   }
+
+  @Override
+  public void setStartPosition() {
+    turningEncoder.setPosition(0.0);
+    driveMotor.setSelectedSensorPosition(0.0);
+  }
 }
