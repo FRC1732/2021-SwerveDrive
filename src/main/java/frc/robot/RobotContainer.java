@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.teleop.DriveWithJoystick;
 import frc.robot.commands.autonomous.DriveDistance;
+import frc.robot.commands.subsystem_controls.AlignWheelsCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.MotorTestSubsystem;
 import frc.robot.subsystems.Intake;
@@ -20,10 +21,8 @@ public class RobotContainer {
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
 
-  // Commands
-  // private IntakeCommand intakeCommand;
-
   private SendableChooser autonomousModeOption;
+
   // Driver Joysticks
   private Joystick l_joystick;
   // private Joystick r_joystick;
@@ -90,6 +89,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(() -> intake.takeIn(true), intake)
         .whenReleased(() -> intake.takeIn(false), intake);
+
+    // FIXME: pick a button to test wheel alignment
+    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_4).whenPressed(new AlignWheelsCommand(s_drivetrain));
 
     // RightJoystick button configuration
     // r_button_2.whileHeld(new ArcadeDrive(s_drivetrain, r_joystick), true);

@@ -21,6 +21,9 @@ public abstract class AbstractSwerveModule {
     // RPM * encoder resolution / number of 100ms in a minute
     protected final double MAX_VELOCITY_PER_100MS = 6000.0 * 2048.0 / 600.0;
 
+    // Max slop allowed for wheel alignment
+    protected final double MAX_SLOP_FOR_WHEEL_ALIGNMNET = 0.1;
+
     public AbstractSwerveModule(SwervePosition swervePosition) {
         this.swervePosition = swervePosition;
 
@@ -41,6 +44,8 @@ public abstract class AbstractSwerveModule {
         layout.addNumber("Drive Motor Voltage (V)", this::getDriveMotorVoltage);
         layout.addNumber("Drive Motor Output (m-s)", this::getDriveMotorOutputLevel);
         layout.addNumber("Drive Motor FF (m-s)", this::getDriveMotorFeedForward);
+
+        layout.addNumber("Wheel Alignment", this::getWheelAlignment);
     }
 
     protected double convertMotorVelocityToMetersSecond(double motorVelocity) {
@@ -71,5 +76,7 @@ public abstract class AbstractSwerveModule {
 
     abstract double getDriveMotorFeedForward();
 
-    abstract void setStartPosition();
+    abstract double getWheelAlignment();
+
+    abstract boolean setStartPosition();
 }
