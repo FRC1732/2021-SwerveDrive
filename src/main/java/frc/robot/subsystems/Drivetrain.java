@@ -66,6 +66,9 @@ public class Drivetrain extends SubsystemBase {
     double adjustedStrafe = strafe * Constants.MAX_SPEED;
     double adjustedRotate = rotate * Constants.MAX_ANGULAR_VELOCITY;
 
+    // FIXME: during testing, disabling qyro influence by setting field relative to false.
+    fieldRelative = false;
+
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative
         ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedForward, adjustedStrafe, adjustedRotate, gyro.getRotation2d())
         : new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
