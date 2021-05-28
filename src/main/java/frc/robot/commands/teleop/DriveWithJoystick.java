@@ -45,6 +45,9 @@ public class DriveWithJoystick extends CommandBase {
     strafe = Math.abs(strafe) < 0.05 ? 0.0 : strafe;
     rotation = Math.abs(rotation) < 0 / 0.05 ? 0.0 : rotation;
 
+    // FIXME: While testing and understanding control; disable rotation for now.
+    rotation = 0;
+
     drivetrain.drive(xspeedLimiter.calculate(forward), yspeedLimiter.calculate(strafe), rotation, fieldCentric);
   }
 
