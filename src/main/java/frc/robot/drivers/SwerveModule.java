@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -23,7 +24,9 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 public class SwerveModule extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
-  private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI / 53.3;
+  // private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI /
+  // 53.3;
+  private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI;
 
   private final TalonFX driveMotor;
   private final CANSparkMax turningMotor;
@@ -31,7 +34,7 @@ public class SwerveModule extends AbstractSwerveModule {
 
   // no PID on drive, just direct control but will use a slew.
   // private final PIDController drivePIDController = new PIDController(1, 0, 0);
-  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(0.5, 0.1, 0.02,
+  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(0.5, 0.01, 0.02,
       new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_VELOCITY, Constants.MAX_ANGULAR_ACCELERATION));
 
   // private final SimpleMotorFeedforward driveMotorFeedforward = new
@@ -50,9 +53,12 @@ public class SwerveModule extends AbstractSwerveModule {
 
   /**
    * Constructs a SwerveModule.
-   *
-   * @param driveMotorChannel   ID for the drive motor.
-   * @param turningMotorChannel ID for the turning motor.
+   * 
+   * @param talonID         ID for the drive motor.
+   * @param sparkID         ID for the turning motor.
+   * @param absoluteChannel Digital Input for absolute PWM signal
+   * @param wheelAlignment  Value of wheel alignment when going forward
+   * @param position        Notation of position of the module on the robot
    */
   public SwerveModule(int talonID, int sparkID, int absoluteChannel, double wheelAlignment, SwervePosition position) {
     super(position);
@@ -68,7 +74,11 @@ public class SwerveModule extends AbstractSwerveModule {
 
     turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     turningMotor.restoreFactoryDefaults();
-    turningEncoder = turningMotor.getEncoder();
+    // turningEncoder = turningMotor.getEncoder();
+    // turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
+    // turningEncoder.setPosition(0);
+
+    turningEncoder = turningMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
     turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
     turningEncoder.setPosition(0);
 

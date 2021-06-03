@@ -106,7 +106,9 @@ public final class Constants {
 
     public static final double MAX_SPEED = 4.0; // 4.0 meters per second (under the theoretical max of 15.9 ft/s
     // provided by mechanical)
-    public static final double MAX_ANGULAR_VELOCITY = Math.PI; // radians per second
-    public static final double MAX_ANGULAR_ACCELERATION = 2 * Math.PI; // radians per second squared
+
+    // putting in a 10x to make the modules turn faster.  How fast can we go?
+    public static final double MAX_ANGULAR_VELOCITY = 10.0 * Math.PI; // radians per second
+    public static final double MAX_ANGULAR_ACCELERATION = 10.0 * 2 * Math.PI; // radians per second squared
 
 }
