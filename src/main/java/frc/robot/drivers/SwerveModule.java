@@ -24,9 +24,8 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 public class SwerveModule extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
-  // private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI /
-  // 53.3;
-  private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI;
+  private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI / 53.3;
+  // private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI;
 
   private final TalonFX driveMotor;
   private final CANSparkMax turningMotor;
@@ -74,13 +73,14 @@ public class SwerveModule extends AbstractSwerveModule {
 
     turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     turningMotor.restoreFactoryDefaults();
-    // turningEncoder = turningMotor.getEncoder();
-    // turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
-    // turningEncoder.setPosition(0);
-
-    turningEncoder = turningMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
+    turningEncoder = turningMotor.getEncoder();
     turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
     turningEncoder.setPosition(0);
+
+    // turningEncoder =
+    // turningMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
+    // turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
+    // turningEncoder.setPosition(0);
 
     optimizedState = new SwerveModuleState();
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);

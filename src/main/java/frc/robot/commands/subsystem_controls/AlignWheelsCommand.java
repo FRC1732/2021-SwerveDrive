@@ -24,7 +24,7 @@ public class AlignWheelsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    isFinished = driveTrain.setStartPosition();
+    isFinished = driveTrain.setStartPosition(); // null pointer
   }
 
   // Called once the command ends or is interrupted.

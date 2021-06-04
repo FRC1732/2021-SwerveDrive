@@ -80,8 +80,8 @@ public class RobotContainer {
     }
 
     if (haveTestJoystick) {
-      new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_3).whenPressed(() -> motorTestSubsystem.runMotor(0.2))
-          .whenReleased(() -> motorTestSubsystem.runMotor(0));
+      //new JoystickButton(t_joystick, Constants.L_JOYSTICKBUTTON_3).whenPressed(() -> motorTestSubsystem.runMotor(0.2))
+      //    .whenReleased(() -> motorTestSubsystem.runMotor(0));
     }
 
   }
@@ -91,7 +91,7 @@ public class RobotContainer {
         .whenReleased(() -> intake.takeIn(false), intake);
 
     // FIXME: pick a button to test wheel alignment
-    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_4).whenPressed(new AlignWheelsCommand(s_drivetrain));
+    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
 
     // RightJoystick button configuration
     // r_button_2.whileHeld(new ArcadeDrive(s_drivetrain, r_joystick), true);
