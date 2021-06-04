@@ -14,6 +14,7 @@ public class AlignWheelsCommand extends CommandBase {
   /** Creates a new AlignWheelsCommand. */
   public AlignWheelsCommand(Drivetrain driveTrain) {
     addRequirements(driveTrain);
+    this.driveTrain = driveTrain;
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +25,7 @@ public class AlignWheelsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    isFinished = driveTrain.setStartPosition(); // null pointer
+    isFinished = driveTrain.setStartPosition();
   }
 
   // Called once the command ends or is interrupted.
