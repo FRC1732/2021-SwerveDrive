@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
@@ -71,6 +72,7 @@ public class SwerveModule extends AbstractSwerveModule {
 
     turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     turningMotor.restoreFactoryDefaults();
+    //CANPIDController controller = turningMotor.getPIDController();
 
     if (Constants.SWERVE_USE_ALTERNATE_ENCODER) {
       turningEncoder = turningMotor.getEncoder();
@@ -194,5 +196,10 @@ public class SwerveModule extends AbstractSwerveModule {
   @Override
   double getWheelAlignment() {
     return dutyCycle.getOutput();
+  }
+
+  @Override
+  CANPIDController getCANPIDController() {
+    return turningMotor.getPIDController();
   }
 }

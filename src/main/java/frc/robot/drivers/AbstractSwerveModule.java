@@ -4,16 +4,23 @@
 
 package frc.robot.drivers;
 
+import java.util.Map;
+
+import com.revrobotics.CANPIDController;
+
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public abstract class AbstractSwerveModule {
     private final SwervePosition swervePosition;
     private ShuffleboardTab tab = Shuffleboard.getTab("Swerve Modules");
+    private ShuffleboardTab tabPID = Shuffleboard.getTab("Swerve Modules - PID");
 
     // guessing at a max RPM to equate to max speed; really this is mechanical math,
     // a wheel turning to an encoder result in a 100ms period
@@ -31,7 +38,7 @@ public abstract class AbstractSwerveModule {
     }
 
     private void initShuffleBoard() {
-        ShuffleboardLayout layout = tab.getLayout(swervePosition.toString(), BuiltInLayouts.kList).withSize(2, 5);
+        ShuffleboardLayout layout = tab.getLayout(swervePosition.toString(), BuiltInLayouts.kList).withSize(2, 4);
 
         layout.addNumber("Turn Position (r)", this::getTurnPosition);
         layout.addNumber("Turn Target (r)", this::getTurnTarget);
@@ -46,6 +53,16 @@ public abstract class AbstractSwerveModule {
         layout.addNumber("Drive Motor FF (m-s)", this::getDriveMotorFeedForward);
 
         layout.addNumber("Wheel Alignment", this::getWheelAlignment);
+
+        ShuffleboardLayout layoutPid = tabPID.getLayout(swervePosition.toString(), BuiltInLayouts.kList).withSize(2, 4);
+
+        layoutPid.addNumber("Turn Motor Voltage", () -> getTurnMotorVoltage()).withWidget(BuiltInWidgets.kNumberBar);
+        layoutPid.addNumber("P", ()-> getCANPIDController().getP());
+        layoutPid.addNumber("I", ()-> getCANPIDController().getI());
+        layoutPid.addNumber("D", ()-> getCANPIDController().getD());
+        layoutPid.addNumber("FF", ()-> getCANPIDController().getFF());
+        layoutPid.addNumber("Max Output", ()-> getCANPIDController().getOutputMax());
+        layoutPid.addNumber("Min Output", ()-> getCANPIDController().getOutputMin());
     }
 
     protected double convertMotorVelocityToMetersSecond(double motorVelocity) {
@@ -79,4 +96,6 @@ public abstract class AbstractSwerveModule {
     abstract double getWheelAlignment();
 
     abstract boolean setStartPosition();
+
+    abstract CANPIDController getCANPIDController();
 }
