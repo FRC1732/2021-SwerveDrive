@@ -7,19 +7,19 @@ package frc.robot.commands.teleop;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainMax;
 
 public class DriveWithJoystick extends CommandBase {
   private Joystick leftJoystick;
   // private Joystick rightJoystick;
   private Boolean fieldCentric;
-  private Drivetrain drivetrain;
+  private DrivetrainMax drivetrain;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/4 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(4);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(4);
 
-  public DriveWithJoystick(Joystick leftJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
+  public DriveWithJoystick(Joystick leftJoystick, DrivetrainMax drivetrain, Boolean fieldCentric) {
     addRequirements(drivetrain);
     
     this.leftJoystick = leftJoystick;

@@ -20,9 +20,9 @@ package frc.robot;
 public final class Constants {
 
     // ================== Subsystem ::: Drivetrain ==================
-    public static final int DRIVETRAIN_BACK_RIGHT_AZIMUTH = 19;
+    public static final int DRIVETRAIN_BACK_RIGHT_AZIMUTH = 16;
     public static final int DRIVETRAIN_FRONT_RIGHT_AZIMUTH = 17;
-    public static final int DRIVETRAIN_FRONT_LEFT_AZIMUTH = 16;
+    public static final int DRIVETRAIN_FRONT_LEFT_AZIMUTH = 19;
     public static final int DRIVETRAIN_BACK_LEFT_AZIMUTH = 18;
 
     public static final int DRIVETRAIN_BACK_RIGHT_DRIVE = 2;

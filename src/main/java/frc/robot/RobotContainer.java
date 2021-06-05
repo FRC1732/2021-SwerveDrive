@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.teleop.DriveWithJoystick;
 import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.commands.subsystem_controls.AlignWheelsCommand;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainMax;
 import frc.robot.subsystems.MotorTestSubsystem;
 import frc.robot.subsystems.Intake;
 
 public class RobotContainer {
   // Subsystems
-  public static Drivetrain s_drivetrain;
+  public static DrivetrainMax s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
 
@@ -47,14 +47,14 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Declare subsystems
-    s_drivetrain = new Drivetrain();
+    s_drivetrain = new DrivetrainMax();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
     // r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
     intake = new Intake();
 
     s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
 
-    motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
+    // motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
 
     defineButtons(); // Define Buttons
     configureButtonBindings(); // Configure the button bindings
@@ -91,7 +91,7 @@ public class RobotContainer {
         .whenReleased(() -> intake.takeIn(false), intake);
 
     // FIXME: pick a button to test wheel alignment
-    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
+    // new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
 
     // RightJoystick button configuration
     // r_button_2.whileHeld(new ArcadeDrive(s_drivetrain, r_joystick), true);
@@ -124,7 +124,7 @@ public class RobotContainer {
   }
 
   private void defineAutonomousComponents() {
-    driveDistanceAuto = new DriveDistance(s_drivetrain, -3);
+    // driveDistanceAuto = new DriveDistance(s_drivetrain, -3);
   }
 
   private void defineAutonomousCommands() {
@@ -168,7 +168,7 @@ public class RobotContainer {
   }
 
   public void setStartPosition() {
-    s_drivetrain.setStartPosition();
+    //s_drivetrain.setStartPosition();
   }
 
 }

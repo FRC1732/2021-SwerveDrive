@@ -54,6 +54,8 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   private DutyCycle dutyCycle;
   private final double wheelAlignment;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  public double lastAngle;
+  public double offset;
 
   /**
    * Constructs a SwerveModuleMax.
@@ -82,13 +84,13 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     turningEncoder = turningMotor.getEncoder();
 
     // PID coefficients
-    kP = 0.1; 
-    kI = 1e-4;
-    kD = 1; 
+    kP = .5; 
+    kI = 0;
+    kD = 0; 
     kIz = 0; 
     kFF = 0; 
-    kMaxOutput = 1; 
-    kMinOutput = -1;
+    kMaxOutput = 0.5; 
+    kMinOutput = -0.5;
 
     // set PID coefficients
     pidController.setP(kP);
@@ -109,8 +111,10 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     optimizedState = new SwerveModuleState();
     //turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
+    //dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
     this.wheelAlignment = wheelAlignment;
+
+    offset = turningEncoder.getPosition();
   }
 
   /**
@@ -132,18 +136,31 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     // (East/West). I am not sure we want that but its going to be a driver decision
     // optimizedState = SwerveModuleState.optimize(desiredState, new
     // Rotation2d(turningEncoder.getPosition()));
-    optimizedState = desiredState; // no optimization
 
-    driveMotorInput = convertMetersPerSecondToMotorVelocity(optimizedState.speedMetersPerSecond);
+    double current = ((turningEncoder.getPosition() - offset)*6.75422d);
+    
+    double degree = desiredState.angle.getDegrees();
+    degree = (degree % 360 + 360) % 360;
+    double lastAbs = (current % 360 + 360) % 360;
+    double delta = degree - lastAbs;
+
+    if (Math.abs(delta) > 180)
+      delta = delta - (Math.signum(delta) * 360);
+    
+    degree = current + delta;
+    // optimizedState = desiredState; // no optimization
+
+    // driveMotorInput = convertMetersPerSecondToMotorVelocity(optimizedState.speedMetersPerSecond);
     // driveMotor.set(ControlMode.Velocity, driveMotorInput);
-    driveMotor.set(ControlMode.PercentOutput, driveMotorInput / MAX_VELOCITY_PER_100MS);
+    driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
 
     //turnOutput = turningPIDController.calculate(turningEncoder.getPosition(), optimizedState.angle.getRadians());
     //turnFFVoltage = turnMotorFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
     //turningMotor.setVoltage(turnOutput + turnFFVoltage);
 
-    pidController.setReference(optimizedState.angle.getDegrees()/360d, ControlType.kPosition);
+    pidController.setReference((degree/6.75422d) + offset, ControlType.kPosition);
+
   }
 
   @Override
@@ -153,7 +170,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
 
   @Override
   double getTurnTarget() {
-    return optimizedState.angle.getRadians();
+    return lastAngle;
   }
 
   @Override
@@ -225,12 +242,5 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   @Override
   CANPIDController getCANPIDController() {
     return turningMotor.getPIDController();
-  }
-
-  void setPID(double p, double i, double d, double ff){
-    if((p != kP)) { pidController.setP(p); kP = p; }
-    if((i != kI)) { pidController.setI(i); kI = i; }
-    if((d != kD)) { pidController.setD(d); kD = d; }
-    if((ff != kFF)) { pidController.setFF(ff); kFF = ff; }
   }
 }

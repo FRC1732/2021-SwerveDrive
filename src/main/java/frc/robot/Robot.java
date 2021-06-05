@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.setStartPosition();
+    // m_robotContainer.setStartPosition();
   }
 
   @Override
