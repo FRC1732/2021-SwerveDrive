@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
@@ -25,19 +26,17 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 public class SwerveModule extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
   private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI / 53.3;
-  // private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI;
+  // Alternate Encoder returns revolutions; convert to radians; do not anpply gear
+  // ratio
+  private static final double TURN_ENCODER__ALTERNATE_CONVERSION = 1.0 * 2 * Math.PI;
 
   private final TalonFX driveMotor;
   private final CANSparkMax turningMotor;
   private final CANEncoder turningEncoder;
 
-  // no PID on drive, just direct control but will use a slew.
-  // private final PIDController drivePIDController = new PIDController(1, 0, 0);
   private final ProfiledPIDController turningPIDController = new ProfiledPIDController(0.5, 0.01, 0.02,
       new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_VELOCITY, Constants.MAX_ANGULAR_ACCELERATION));
 
-  // private final SimpleMotorFeedforward driveMotorFeedforward = new
-  // SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward turnMotorFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   private SwerveModuleState optimizedState;
@@ -73,14 +72,17 @@ public class SwerveModule extends AbstractSwerveModule {
 
     turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     turningMotor.restoreFactoryDefaults();
-    turningEncoder = turningMotor.getEncoder();
-    turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
-    turningEncoder.setPosition(0);
+    //CANPIDController controller = turningMotor.getPIDController();
 
-    // turningEncoder =
-    // turningMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
-    // turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
-    // turningEncoder.setPosition(0);
+    if (Constants.SWERVE_USE_ALTERNATE_ENCODER) {
+      turningEncoder = turningMotor.getEncoder();
+      turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
+      turningEncoder.setPosition(0);
+    } else {
+      turningEncoder = turningMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
+      turningEncoder.setPositionConversionFactor(TURN_ENCODER__ALTERNATE_CONVERSION);
+      turningEncoder.setPosition(0);
+    }
 
     optimizedState = new SwerveModuleState();
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -194,5 +196,10 @@ public class SwerveModule extends AbstractSwerveModule {
   @Override
   double getWheelAlignment() {
     return dutyCycle.getOutput();
+  }
+
+  @Override
+  CANPIDController getCANPIDController() {
+    return turningMotor.getPIDController();
   }
 }
