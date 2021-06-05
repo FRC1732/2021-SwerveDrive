@@ -18,33 +18,33 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  
-    //================== Subsystem ::: Drivetrain ==================
+
+    // ================== Subsystem ::: Drivetrain ==================
     public static final int DRIVETRAIN_BACK_RIGHT_AZIMUTH = 19;
     public static final int DRIVETRAIN_FRONT_RIGHT_AZIMUTH = 17;
-    public static final int DRIVETRAIN_BACK_LEFT_AZIMUTH = 18;
     public static final int DRIVETRAIN_FRONT_LEFT_AZIMUTH = 16;
-     
+    public static final int DRIVETRAIN_BACK_LEFT_AZIMUTH = 18;
+
     public static final int DRIVETRAIN_BACK_RIGHT_DRIVE = 2;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE = 3;
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE = 4;
     public static final int DRIVETRAIN_BACK_LEFT_DRIVE = 5;
-     
-    public static final int DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = 8;
+
+    public static final int DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = 9;
     public static final int DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = 7;
     public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 6;
-    public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 5;
-     
+    public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 8;
+
     public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.633;
     public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.812;
     public static final double DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET = 0.120;
     public static final double DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET = 0.204;
 
-    //================== Subsystem ::: Intake ==================
+    // ================== Subsystem ::: Intake ==================
     public static final int INTAKE = 23;
     public static final double MOTOR_SPEED = -0.7;
 
-    //================== Driver ::: Left Joystick ::: Mapping ==================
+    // ================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;
     public static final int L_JOYSTICKBUTTON_1 = 1;
     public static final int L_JOYSTICKBUTTON_2 = 2;
@@ -107,9 +107,9 @@ public final class Constants {
     public static final double MAX_SPEED = 4.0; // 4.0 meters per second (under the theoretical max of 15.9 ft/s
     // provided by mechanical)
 
-    // putting in a 10x to make the modules turn faster.  How fast can we go?
+    // putting in a 10x to make the modules turn faster. How fast can we go?
     public static final double MAX_ANGULAR_VELOCITY = 10.0 * Math.PI; // radians per second
     public static final double MAX_ANGULAR_ACCELERATION = 10.0 * 2 * Math.PI; // radians per second squared
-	public static final boolean SWERVE_USE_ALTERNATE_ENCODER = false;
+    public static final boolean SWERVE_USE_ALTERNATE_ENCODER = false;
 
 }
