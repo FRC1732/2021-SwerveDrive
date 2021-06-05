@@ -33,11 +33,11 @@ public final class Constants {
     public static final int DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = 8;
     public static final int DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = 7;
     public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 6;
-    public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 9;
+    public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 5;
      
-    public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.624;
-    public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.790;
-    public static final double DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET = 0.116;
+    public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.633;
+    public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.812;
+    public static final double DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET = 0.120;
     public static final double DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET = 0.204;
 
     //================== Subsystem ::: Intake ==================
@@ -110,5 +110,6 @@ public final class Constants {
     // putting in a 10x to make the modules turn faster.  How fast can we go?
     public static final double MAX_ANGULAR_VELOCITY = 10.0 * Math.PI; // radians per second
     public static final double MAX_ANGULAR_ACCELERATION = 10.0 * 2 * Math.PI; // radians per second squared
+	public static final boolean SWERVE_USE_ALTERNATE_ENCODER = false;
 
 }
