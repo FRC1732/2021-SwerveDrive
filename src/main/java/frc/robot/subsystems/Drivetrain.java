@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivers.SwerveModule;
+import frc.robot.drivers.SwerveModuleMax;
 import frc.robot.drivers.SwervePosition;
 import frc.robot.Constants;
 
@@ -30,16 +31,16 @@ public class Drivetrain extends SubsystemBase {
 
   private final Gyro gyro = new AHRS(SPI.Port.kMXP);
 
-  private final SwerveModule frontLeft = new SwerveModule(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
+  private final SwerveModuleMax frontLeft = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
       Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET, SwervePosition.BackRight);
-  private final SwerveModule frontRight = new SwerveModule(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
+  private final SwerveModuleMax frontRight = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
       Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET, SwervePosition.FrontRight);
-  private final SwerveModule backLeft = new SwerveModule(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
+  private final SwerveModuleMax backLeft = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
       Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);
-  private final SwerveModule backRight = new SwerveModule(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
+  private final SwerveModuleMax backRight = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
       Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET, SwervePosition.FrontLeft);
 

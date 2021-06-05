@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import com.revrobotics.CANPIDController;
 
 public class SwerveModuleMax extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
@@ -219,6 +220,11 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   @Override
   double getWheelAlignment() {
     return dutyCycle.getOutput();
+  }
+
+  @Override
+  CANPIDController getCANPIDController() {
+    return turningMotor.getPIDController();
   }
 
   void setPID(double p, double i, double d, double ff){
