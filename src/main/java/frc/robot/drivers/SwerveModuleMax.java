@@ -89,8 +89,8 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     kD = 0; 
     kIz = 0; 
     kFF = 0; 
-    kMaxOutput = 0.5; 
-    kMinOutput = -0.5;
+    kMaxOutput = 1; 
+    kMinOutput = -1;
 
     // set PID coefficients
     pidController.setP(kP);
@@ -136,6 +136,10 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     // (East/West). I am not sure we want that but its going to be a driver decision
     // optimizedState = SwerveModuleState.optimize(desiredState, new
     // Rotation2d(turningEncoder.getPosition()));
+    if (Math.abs(desiredState.speedMetersPerSecond) < 0.1d){
+      driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
+      return;
+    }
 
     double current = ((turningEncoder.getPosition() - offset)*6.75422d);
     

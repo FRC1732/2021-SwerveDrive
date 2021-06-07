@@ -15,7 +15,19 @@ import frc.robot.drivers.SwervePosition;
 public class DrivetrainMax extends SubsystemBase {
   private final SwerveModuleMax frontLeft = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
   Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
-  Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);// new SwerveModuleMax(9,4,0,0,null);
+  Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.FrontLeft);
+
+  private final SwerveModuleMax frontRight = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
+  Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+  Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET, SwervePosition.FrontRight);
+
+  private final SwerveModuleMax backLeft = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
+  Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+  Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);
+
+  private final SwerveModuleMax backRight = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
+  Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL,
+  Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET, SwervePosition.BackRight);
 
   public DrivetrainMax() {
   }
@@ -34,9 +46,13 @@ public class DrivetrainMax extends SubsystemBase {
   public void drive(double forward, double strafe, double rotate, boolean fieldRelative) {
     double speed = Math.hypot(strafe, forward);
     speed = speed > 1 ? 1 : speed;
-    Rotation2d angle = new Rotation2d(forward, strafe);
+    speed = speed/2d;
+    Rotation2d angle = new Rotation2d(forward, -1d * strafe);
     SwerveModuleState state = new SwerveModuleState(speed, angle);
     frontLeft.setDesiredState(state);
+    frontRight.setDesiredState(state);
+    backLeft.setDesiredState(state);
+    backRight.setDesiredState(state);
   }
 
   // Stops the motors from
