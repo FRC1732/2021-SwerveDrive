@@ -5,29 +5,40 @@
 package frc.robot.commands.subsystem_controls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 
-public class ZeroGyro extends CommandBase {
-  /** Creates a new ZeroGyro. */
-  public ZeroGyro() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements();
+public class AlignWheelsCommand extends CommandBase {
+  private Drivetrain driveTrain;
+  private boolean isFinished;
+
+  /** Creates a new AlignWheelsCommand. */
+  public AlignWheelsCommand(Drivetrain driveTrain) {
+    addRequirements(driveTrain);
+    this.driveTrain = driveTrain;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    isFinished = driveTrain.setStartPosition();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      driveTrain.stop();
+    }
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return this.isFinished;
   }
 }

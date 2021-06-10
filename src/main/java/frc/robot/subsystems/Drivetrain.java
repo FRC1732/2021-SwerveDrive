@@ -31,13 +31,17 @@ public class Drivetrain extends SubsystemBase {
   private final Gyro gyro = new AHRS(SPI.Port.kMXP);
 
   private final SwerveModule frontLeft = new SwerveModule(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
-      Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, SwervePosition.BackRight);
+      Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET, SwervePosition.BackRight);
   private final SwerveModule frontRight = new SwerveModule(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
-      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, SwervePosition.FrontRight);
+      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET, SwervePosition.FrontRight);
   private final SwerveModule backLeft = new SwerveModule(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
-      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, SwervePosition.BackLeft);
+      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);
   private final SwerveModule backRight = new SwerveModule(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
-      Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, SwervePosition.FrontLeft);
+      Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET, SwervePosition.FrontLeft);
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation,
       backLeftLocation, backRightLocation);
@@ -66,6 +70,10 @@ public class Drivetrain extends SubsystemBase {
     double adjustedStrafe = strafe * Constants.MAX_SPEED;
     double adjustedRotate = rotate * Constants.MAX_ANGULAR_VELOCITY;
 
+    // FIXME: during testing, disabling qyro influence by setting field relative to
+    // false.
+    fieldRelative = false;
+
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative
         ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedForward, adjustedStrafe, adjustedRotate, gyro.getRotation2d())
         : new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
@@ -88,6 +96,21 @@ public class Drivetrain extends SubsystemBase {
   // Stops the motors from
   public void stop() {
     drive(0, 0, 0, false);
+  }
+
+  public boolean setStartPosition() {
+    // return true when all modules report aligned.
+    boolean retval = true;
+    retval &= frontLeft.setStartPosition();
+    retval &= frontRight.setStartPosition();
+    retval &= backLeft.setStartPosition();
+    retval &= backRight.setStartPosition();
+
+    if (retval) {
+      gyro.reset();
+    }
+
+    return retval;
   }
 
 }

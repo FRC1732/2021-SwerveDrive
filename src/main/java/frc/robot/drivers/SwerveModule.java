@@ -9,10 +9,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -22,18 +26,17 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 public class SwerveModule extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
   private static final double TURN_ENCODER_CONVERSION = 1.0 * 2 * Math.PI / 53.3;
+  // Alternate Encoder returns revolutions; convert to radians; do not anpply gear
+  // ratio
+  private static final double TURN_ENCODER__ALTERNATE_CONVERSION = 1.0 * 2 * Math.PI;
 
   private final TalonFX driveMotor;
   private final CANSparkMax turningMotor;
   private final CANEncoder turningEncoder;
 
-  // no PID on drive, just direct control but will use a slew.
-  // private final PIDController drivePIDController = new PIDController(1, 0, 0);
-  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(0.5, 0.1, 0.02,
+  private final ProfiledPIDController turningPIDController = new ProfiledPIDController(0.5, 0.01, 0.02,
       new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_VELOCITY, Constants.MAX_ANGULAR_ACCELERATION));
 
-  // private final SimpleMotorFeedforward driveMotorFeedforward = new
-  // SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward turnMotorFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   private SwerveModuleState optimizedState;
@@ -43,13 +46,19 @@ public class SwerveModule extends AbstractSwerveModule {
   private double turnOutput;
   private double turnFFVoltage;
 
+  private DutyCycle dutyCycle;
+  private final double wheelAlignment;
+
   /**
    * Constructs a SwerveModule.
-   *
-   * @param driveMotorChannel   ID for the drive motor.
-   * @param turningMotorChannel ID for the turning motor.
+   * 
+   * @param talonID         ID for the drive motor.
+   * @param sparkID         ID for the turning motor.
+   * @param absoluteChannel Digital Input for absolute PWM signal
+   * @param wheelAlignment  Value of wheel alignment when going forward
+   * @param position        Notation of position of the module on the robot
    */
-  public SwerveModule(int talonID, int sparkID, SwervePosition position) {
+  public SwerveModule(int talonID, int sparkID, int absoluteChannel, double wheelAlignment, SwervePosition position) {
     super(position);
 
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
@@ -63,12 +72,23 @@ public class SwerveModule extends AbstractSwerveModule {
 
     turningMotor = new CANSparkMax(sparkID, MotorType.kBrushless);
     turningMotor.restoreFactoryDefaults();
-    turningEncoder = turningMotor.getEncoder();
-    turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
-    turningEncoder.setPosition(0);
+    //CANPIDController controller = turningMotor.getPIDController();
+
+    if (Constants.SWERVE_USE_ALTERNATE_ENCODER) {
+      turningEncoder = turningMotor.getEncoder();
+      turningEncoder.setPositionConversionFactor(TURN_ENCODER_CONVERSION);
+      turningEncoder.setPosition(0);
+    } else {
+      turningEncoder = turningMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1024);
+      turningEncoder.setPositionConversionFactor(TURN_ENCODER__ALTERNATE_CONVERSION);
+      turningEncoder.setPosition(0);
+    }
 
     optimizedState = new SwerveModuleState();
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
+    this.wheelAlignment = wheelAlignment;
   }
 
   /**
@@ -150,5 +170,36 @@ public class SwerveModule extends AbstractSwerveModule {
   @Override
   double getDriveMotorFeedForward() {
     return driveMotorFeedforward;
+  }
+
+  @Override
+  public boolean setStartPosition() {
+    double target = dutyCycle.getOutput();
+
+    // we spin the turn motor positive only, even if the alignment is behind us
+    // expecting to loop around that align eventually. We may need to rethink this
+    // approach if we have problems.
+    if (Math.abs(target - wheelAlignment) > 2.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+      turningMotor.set(0.2); // faster
+    } else if (Math.abs(target - wheelAlignment) > MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+      turningMotor.set(0.1); // slower
+    } else {
+      turningMotor.set(0.0); // stop
+      turningEncoder.setPosition(0.0);
+      driveMotor.setSelectedSensorPosition(0.0);
+      return true;
+    }
+
+    return false;
+  }
+
+  @Override
+  double getWheelAlignment() {
+    return dutyCycle.getOutput();
+  }
+
+  @Override
+  CANPIDController getCANPIDController() {
+    return turningMotor.getPIDController();
   }
 }
