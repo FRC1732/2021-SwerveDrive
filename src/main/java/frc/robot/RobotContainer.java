@@ -20,6 +20,7 @@ public class RobotContainer {
   public static DrivetrainMax s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
+  private Climber climber;
 
   private SendableChooser autonomousModeOption;
 
@@ -51,6 +52,7 @@ public class RobotContainer {
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
     // r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
     intake = new Intake();
+    climber = new Climber();
 
     s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
 
@@ -92,6 +94,12 @@ public class RobotContainer {
 
     // FIXME: pick a button to test wheel alignment
     // new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
+    
+    new JoystickButton(o_joystick, Constants.R_JOYSTICKBUTTON_2).whenPressed(() -> climber.up(), climber)
+      .whenReleased(() -> intake.stop(), climber);
+    
+    new JoystickButton(o_joystick, Constants.R_JOYSTICKBUTTON_3).whenPressed(() -> climber.down(), climber)
+      .whenReleased(() -> intake.stop(), climber);
 
     // RightJoystick button configuration
     // r_button_2.whileHeld(new ArcadeDrive(s_drivetrain, r_joystick), true);
