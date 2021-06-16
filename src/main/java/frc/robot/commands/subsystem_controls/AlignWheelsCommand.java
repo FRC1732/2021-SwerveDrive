@@ -6,13 +6,14 @@ package frc.robot.commands.subsystem_controls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainMax;
 
 public class AlignWheelsCommand extends CommandBase {
-  private Drivetrain driveTrain;
+  private DrivetrainMax driveTrain;
   private boolean isFinished;
 
   /** Creates a new AlignWheelsCommand. */
-  public AlignWheelsCommand(Drivetrain driveTrain) {
+  public AlignWheelsCommand(DrivetrainMax driveTrain) {
     addRequirements(driveTrain);
     this.driveTrain = driveTrain;
   }

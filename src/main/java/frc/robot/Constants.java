@@ -35,9 +35,9 @@ public final class Constants {
     public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 6;
     public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 8;
 
-    public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.633;
-    public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.812;
-    public static final double DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET = 0.120;
+    public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.133;
+    public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.8;
+    public static final double DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET = 0.62;
     public static final double DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET = 0.204;
 
     // ================== Subsystem ::: Intake ==================

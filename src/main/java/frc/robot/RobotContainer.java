@@ -14,6 +14,7 @@ import frc.robot.commands.subsystem_controls.AlignWheelsCommand;
 import frc.robot.subsystems.DrivetrainMax;
 import frc.robot.subsystems.MotorTestSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Climber;
 
 public class RobotContainer {
   // Subsystems
@@ -41,7 +42,7 @@ public class RobotContainer {
   private Joystick t_joystick;
 
   // Operator Joysticks
-  // private Joystick o_joystick;
+  private Joystick o_joystick;
 
   // Operator1Joystick Buttons
 
@@ -50,6 +51,7 @@ public class RobotContainer {
     // Declare subsystems
     s_drivetrain = new DrivetrainMax();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
+    o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
     // r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
     intake = new Intake();
     climber = new Climber();
@@ -96,10 +98,12 @@ public class RobotContainer {
     // new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
     
     new JoystickButton(o_joystick, Constants.R_JOYSTICKBUTTON_2).whenPressed(() -> climber.up(), climber)
-      .whenReleased(() -> intake.stop(), climber);
+      .whenReleased(() -> climber.stop(), climber);
     
     new JoystickButton(o_joystick, Constants.R_JOYSTICKBUTTON_3).whenPressed(() -> climber.down(), climber)
-      .whenReleased(() -> intake.stop(), climber);
+      .whenReleased(() -> climber.stop(), climber);
+
+    new JoystickButton(o_joystick, Constants.R_JOYSTICKBUTTON_9).whenPressed(new AlignWheelsCommand(s_drivetrain));
 
     // RightJoystick button configuration
     // r_button_2.whileHeld(new ArcadeDrive(s_drivetrain, r_joystick), true);

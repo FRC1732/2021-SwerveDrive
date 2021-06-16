@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivers.SwerveModuleMax;
 import frc.robot.Constants;
 import frc.robot.drivers.SwervePosition;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 /** Represents a swerve drive style drivetrain. */
 public class DrivetrainMax extends SubsystemBase {
@@ -29,7 +32,10 @@ public class DrivetrainMax extends SubsystemBase {
   Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL,
   Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET, SwervePosition.BackRight);
 
+  private final Gyro gyro = new AHRS(SPI.Port.kMXP);
+
   public DrivetrainMax() {
+    gyro.reset();
   }
 
   /**
@@ -58,5 +64,20 @@ public class DrivetrainMax extends SubsystemBase {
   // Stops the motors from
   public void stop() {
     drive(0, 0, 0, false);
+  }
+
+  public boolean setStartPosition() {
+    // return true when all modules report aligned.
+    boolean retval = true;
+    retval &= frontLeft.setStartPosition();
+    retval &= frontRight.setStartPosition();
+    retval &= backLeft.setStartPosition();
+    retval &= backRight.setStartPosition();
+
+    if (retval) {
+      gyro.reset();
+    }
+
+    return retval;
   }
 }
