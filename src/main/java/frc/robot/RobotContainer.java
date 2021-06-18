@@ -13,6 +13,7 @@ import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.commands.subsystem_controls.AlignWheelsCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.MotorTestSubsystem;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake;
 
 public class RobotContainer {
@@ -20,6 +21,7 @@ public class RobotContainer {
   public static Drivetrain s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
+  private Shooter shooter;
 
   private SendableChooser autonomousModeOption;
 
@@ -40,7 +42,7 @@ public class RobotContainer {
   private Joystick t_joystick;
 
   // Operator Joysticks
-  // private Joystick o_joystick;
+  private Joystick o_joystick;
 
   // Operator1Joystick Buttons
 
@@ -49,8 +51,9 @@ public class RobotContainer {
     // Declare subsystems
     s_drivetrain = new Drivetrain();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
-    // r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
+    o_joystick = new Joystick(Constants.OPERATOR_JOYSTICK_PORT_ID);
     intake = new Intake();
+    shooter = new Shooter();
 
     s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
 
@@ -89,6 +92,17 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(() -> intake.takeIn(true), intake)
         .whenReleased(() -> intake.takeIn(false), intake);
+
+    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.shooterOn())
+    .whenReleased(() -> shooter.stop());
+
+    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_12).whenPressed(() -> shooter.reverse())
+    .whenReleased(() -> shooter.stop());
+
+    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_4).whenPressed(() -> shooter.increaseSpeed());
+
+    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_5).whenPressed(() -> shooter.decreaseSpeed());
+    
 
     // FIXME: pick a button to test wheel alignment
     new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
