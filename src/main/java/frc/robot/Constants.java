@@ -112,7 +112,7 @@ public final class Constants {
     // provided by mechanical)
 
     // putting in a 10x to make the modules turn faster. How fast can we go?
-    public static final double MAX_ANGULAR_VELOCITY = 10.0 * Math.PI; // radians per second
+    public static final double MAX_ANGULAR_VELOCITY = Math.PI * 3; // radians per second
     public static final double MAX_ANGULAR_ACCELERATION = 10.0 * 2 * Math.PI; // radians per second squared
     public static final boolean SWERVE_USE_ALTERNATE_ENCODER = false;
 

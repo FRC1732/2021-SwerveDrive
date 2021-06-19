@@ -57,6 +57,8 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   public double lastAngle;
   public double offset;
 
+  private static final double TURNING_MOTOR_RATIO = 6.75422d;
+
   /**
    * Constructs a SwerveModuleMax.
    * 
@@ -71,7 +73,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
 
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
     talonConfig.peakOutputForward = 1.0;
-    talonConfig.peakOutputReverse = 1.0;
+    talonConfig.peakOutputReverse = -1.0;
     talonConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
 
     driveMotor = new TalonFX(talonID);
@@ -127,43 +129,75 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   }
 
   /**
+   * Efficiently set the swerve module
+   * 
+   * @param degree Angle to set the wheel (any angle)
+   * @param speed  Percent to set the wheel -1 to 1
+   */
+  private void setAbsolute(double targetDegree, double speed) {
+
+    if (Math.abs(speed) < 0.1d) {
+      driveMotor.set(ControlMode.PercentOutput, speed);
+      return;
+    }
+
+    double currentEncoderActual = ((turningEncoder.getPosition() - offset) * TURNING_MOTOR_RATIO);
+
+    double targetDegreeAbs = (targetDegree % 360 + 360) % 360;
+    double currentEncoderAbs = (currentEncoderActual % 360 + 360) % 360;
+    double delta = targetDegreeAbs - currentEncoderAbs;
+
+    if (Math.abs(delta) > 180)
+      delta = delta - (Math.signum(delta) * 360);
+
+    if (Math.abs(delta) > 90){
+      delta = delta - (Math.signum(delta) * 180);
+      speed = speed * -1;
+    }
+
+    double newDegree = currentEncoderActual + delta;
+
+    driveMotor.set(ControlMode.PercentOutput, speed);
+    pidController.setReference((newDegree / TURNING_MOTOR_RATIO) + offset, ControlType.kPosition);
+  }
+
+  /**
    * Sets the desired state for the module.
    *
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    // optimize will cause the modules to flip when going past +/-90 degrees
-    // (East/West). I am not sure we want that but its going to be a driver decision
-    // optimizedState = SwerveModuleState.optimize(desiredState, new
-    // Rotation2d(turningEncoder.getPosition()));
-    if (Math.abs(desiredState.speedMetersPerSecond) < 0.1d){
-      driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
-      return;
-    }
 
-    double current = ((turningEncoder.getPosition() - offset)*6.75422d);
     
-    double degree = desiredState.angle.getDegrees();
-    degree = (degree % 360 + 360) % 360;
-    double lastAbs = (current % 360 + 360) % 360;
-    double delta = degree - lastAbs;
-
-    if (Math.abs(delta) > 180)
-      delta = delta - (Math.signum(delta) * 360);
-    
-    degree = current + delta;
     // optimizedState = desiredState; // no optimization
 
     // driveMotorInput = convertMetersPerSecondToMotorVelocity(optimizedState.speedMetersPerSecond);
     // driveMotor.set(ControlMode.Velocity, driveMotorInput);
-    driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
+    
 
     //turnOutput = turningPIDController.calculate(turningEncoder.getPosition(), optimizedState.angle.getRadians());
     //turnFFVoltage = turnMotorFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
     //turningMotor.setVoltage(turnOutput + turnFFVoltage);
 
-    pidController.setReference((degree/6.75422d) + offset, ControlType.kPosition);
+    // setAbsolute(desiredState.angle.getDegrees(), desiredState.speedMetersPerSecond / Constants.MAX_SPEED);
+    if (Math.abs(desiredState.speedMetersPerSecond / Constants.MAX_SPEED) < 0.05d) {
+      driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond / Constants.MAX_SPEED);
+      return;
+    }
+
+    double currentEncoderActual = ((turningEncoder.getPosition() - offset) * TURNING_MOTOR_RATIO);
+    double currentEncoderAbs = (currentEncoderActual % 360 + 360) % 360;
+
+
+    Rotation2d currentRotation = Rotation2d.fromDegrees((turningEncoder.getPosition() - offset) * TURNING_MOTOR_RATIO);
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
+
+    // Find the difference between our current rotational position + our new rotational position
+    Rotation2d rotationDelta = state.angle.minus(currentRotation);
+
+    driveMotor.set(ControlMode.PercentOutput, (state.speedMetersPerSecond / Constants.MAX_SPEED) * 0.5d);
+    pidController.setReference(((currentRotation.getDegrees() + rotationDelta.getDegrees()) / TURNING_MOTOR_RATIO) + offset, ControlType.kPosition);
 
   }
 

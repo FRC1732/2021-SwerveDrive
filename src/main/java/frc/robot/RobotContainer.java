@@ -15,10 +15,11 @@ import frc.robot.subsystems.DrivetrainMax;
 import frc.robot.subsystems.MotorTestSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
 
 public class RobotContainer {
   // Subsystems
-  public static DrivetrainMax s_drivetrain;
+  public static Drivetrain s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
   private Climber climber;
@@ -27,7 +28,7 @@ public class RobotContainer {
 
   // Driver Joysticks
   private Joystick l_joystick;
-  // private Joystick r_joystick;
+  private Joystick r_joystick;
 
   // Autonomous Components
   private DriveDistance driveDistanceAuto;
@@ -49,13 +50,13 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Declare subsystems
-    s_drivetrain = new DrivetrainMax();
+    s_drivetrain = new Drivetrain();//DrivetrainMax();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
-    // r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
+    r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
     intake = new Intake();
     climber = new Climber();
 
-    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
+    s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, r_joystick, s_drivetrain, Boolean.valueOf(false)));
 
     // motorTestSubsystem = new MotorTestSubsystem(s_drivetrain);
 
@@ -97,6 +98,12 @@ public class RobotContainer {
         .whenReleased(() -> climber.stop(), climber);
 
     new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_10).whenPressed(() -> climber.down(), climber)
+        .whenReleased(() -> climber.stop(), climber);
+
+        new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_6).whenPressed(() -> climber.upfast(), climber)
+        .whenReleased(() -> climber.stop(), climber);
+
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_7).whenPressed(() -> climber.downfast(), climber)
         .whenReleased(() -> climber.stop(), climber);
 
     // FIXME: pick a button to test wheel alignment

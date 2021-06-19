@@ -7,23 +7,24 @@ package frc.robot.commands.teleop;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainMax;
 
 public class DriveWithJoystick extends CommandBase {
   private Joystick leftJoystick;
-  // private Joystick rightJoystick;
+  private Joystick rightJoystick;
   private Boolean fieldCentric;
-  private DrivetrainMax drivetrain;
+  private Drivetrain drivetrain;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/4 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(4);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(4);
 
-  public DriveWithJoystick(Joystick leftJoystick, DrivetrainMax drivetrain, Boolean fieldCentric) {
+  public DriveWithJoystick(Joystick leftJoystick, Joystick rightJoystick, Drivetrain drivetrain, Boolean fieldCentric) {
     addRequirements(drivetrain);
     
     this.leftJoystick = leftJoystick;
-    // this.rightJoystick = rightJoystick;
+    this.rightJoystick = rightJoystick;
     this.drivetrain = drivetrain;
     this.fieldCentric = fieldCentric;
   }
@@ -37,18 +38,15 @@ public class DriveWithJoystick extends CommandBase {
   @Override
   public void execute() {
     // flip +/- to match drivetrain.drive
-    double forward = -leftJoystick.getRawAxis(1);
-    double strafe = -leftJoystick.getRawAxis(0);
-    double rotation = -leftJoystick.getRawAxis(2);
+    double forward = Math.signum(leftJoystick.getRawAxis(1)) * -Math.pow(leftJoystick.getRawAxis(1),2);
+    double strafe = Math.signum(leftJoystick.getRawAxis(0)) * Math.pow(leftJoystick.getRawAxis(0),2);
+    double rotation = Math.signum(rightJoystick.getRawAxis(0)) * Math.pow(rightJoystick.getRawAxis(0),2);
 
     forward = Math.abs(forward) < 0.05 ? 0.0 : forward;
     strafe = Math.abs(strafe) < 0.05 ? 0.0 : strafe;
-    rotation = Math.abs(rotation) < 0 / 0.05 ? 0.0 : rotation;
+    rotation = Math.abs(rotation) < 0.05 ? 0.0 : rotation;
 
-    // FIXME: While testing and understanding control; disable rotation for now.
-    rotation = 0;
-
-    drivetrain.drive(xspeedLimiter.calculate(forward), yspeedLimiter.calculate(strafe), rotation, fieldCentric);
+    drivetrain.drive(xspeedLimiter.calculate(forward), yspeedLimiter.calculate(strafe), rotation, false); //xspeedLimiter.calculate(forward), yspeedLimiter.calculate(strafe)
   }
 
   // Called once the command ends or is interrupted.

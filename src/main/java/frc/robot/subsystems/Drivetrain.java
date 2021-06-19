@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivers.SwerveModule;
 import frc.robot.drivers.SwerveModuleMax;
@@ -24,25 +25,28 @@ public class Drivetrain extends SubsystemBase {
   private static final double WHEELBASE = 0.3854; // in meters
 
   // Translation2Ds are in meters
-  private final Translation2d frontLeftLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0);
-  private final Translation2d frontRightLocation = new Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
-  private final Translation2d backLeftLocation = new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0);
-  private final Translation2d backRightLocation = new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0);
+  private final Translation2d frontLeftLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / -2.0);
+  private final Translation2d frontRightLocation = new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0);
+  private final Translation2d backLeftLocation = new Translation2d(TRACKWIDTH / -2.0, WHEELBASE / -2.0);
+  private final Translation2d backRightLocation = new Translation2d(TRACKWIDTH / -2.0, WHEELBASE / 2.0);
 
   private final Gyro gyro = new AHRS(SPI.Port.kMXP);
 
-  private final SwerveModuleMax frontLeft = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
+  private final SwerveModuleMax frontLeft = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
+      Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.FrontLeft);
+
+  private final SwerveModuleMax frontRight = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
+      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET, SwervePosition.FrontRight);
+
+  private final SwerveModuleMax backLeft = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
+      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);
+
+  private final SwerveModuleMax backRight = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
       Constants.DRIVETRAIN_BACK_RIGHT_AZIMUTH, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET, SwervePosition.BackRight);
-  private final SwerveModuleMax frontRight = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
-      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL,
-      Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET, SwervePosition.FrontRight);
-  private final SwerveModuleMax backLeft = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE,
-      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
-      Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);
-  private final SwerveModuleMax backRight = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
-      Constants.DRIVETRAIN_FRONT_LEFT_AZIMUTH, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL,
-      Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET, SwervePosition.FrontLeft);
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation,
       backLeftLocation, backRightLocation);
@@ -71,13 +75,7 @@ public class Drivetrain extends SubsystemBase {
     double adjustedStrafe = strafe * Constants.MAX_SPEED;
     double adjustedRotate = rotate * Constants.MAX_ANGULAR_VELOCITY;
 
-    // FIXME: during testing, disabling qyro influence by setting field relative to
-    // false.
-    fieldRelative = false;
-
-    var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(adjustedForward, adjustedStrafe, adjustedRotate, gyro.getRotation2d())
-        : new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
+    SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(adjustedForward, adjustedStrafe, adjustedRotate));
 
     // This will make sure speeds do not exceed maxium and adjust all wheels if
     // necessary.
