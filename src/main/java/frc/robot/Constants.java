@@ -44,6 +44,10 @@ public final class Constants {
     public static final int INTAKE = 23;
     public static final double MOTOR_SPEED = -0.7;
 
+    // ================== Subsystem ::: Climber ==================
+    public static final int CLIMBER_LEFT = 25;
+    public static final int CLIMBER_RIGHT = 26;
+
     // ================== Driver ::: Left Joystick ::: Mapping ==================
     public static final int LEFT_JOYSTICK_PORT_ID = 0;
     public static final int L_JOYSTICKBUTTON_1 = 1;

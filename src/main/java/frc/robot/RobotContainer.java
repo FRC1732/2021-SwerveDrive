@@ -14,12 +14,14 @@ import frc.robot.commands.subsystem_controls.AlignWheelsCommand;
 import frc.robot.subsystems.DrivetrainMax;
 import frc.robot.subsystems.MotorTestSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Climber;
 
 public class RobotContainer {
   // Subsystems
   public static DrivetrainMax s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
+  private Climber climber;
 
   private SendableChooser autonomousModeOption;
 
@@ -51,6 +53,7 @@ public class RobotContainer {
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
     // r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
     intake = new Intake();
+    climber = new Climber();
 
     s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, s_drivetrain, true));
 
@@ -89,6 +92,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(() -> intake.takeIn(true), intake)
         .whenReleased(() -> intake.takeIn(false), intake);
+
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.up(), climber)
+        .whenReleased(() -> climber.stop(), climber);
+
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_10).whenPressed(() -> climber.down(), climber)
+        .whenReleased(() -> climber.stop(), climber);
 
     // FIXME: pick a button to test wheel alignment
     // new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));
