@@ -116,4 +116,8 @@ public final class Constants {
     public static final double MAX_ANGULAR_ACCELERATION = 10.0 * 2 * Math.PI; // radians per second squared
     public static final boolean SWERVE_USE_ALTERNATE_ENCODER = false;
 
+    // ================== Subsystem ::: Shooter ==================
+    public static final int MOTORMASTER = 27;
+    public static final int MOTORFOLLOWER = 28;
+
 }
