@@ -18,6 +18,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
+import frc.robot.commands.Indexing.FeedBallToShooter;
 import frc.robot.commands.Indexing.PickUpBall;
 import frc.robot.subsystems.Feeder;
 
@@ -116,16 +117,15 @@ public class RobotContainer {
     new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_7).whenPressed(() -> climber.downfast(), climber)
         .whenReleased(() -> climber.stop(), climber);
 
+    new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.maintainRPM())
+        .whenReleased(() -> shooter.stopMotors());
 
-    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.maintainRPM())
-       .whenReleased(() -> shooter.stopMotors());
+    new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_4)
+        .whileHeld(new FeedBallToShooter(indexer, intake, feeder));
 
-       new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_4).whenPressed(() -> feeder.feed())
-       .whenReleased(() -> feeder.stop());
+    new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_5).whenPressed(() -> indexer.reverse())
+        .whenReleased(() -> indexer.stop());
 
-       new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_5).whenPressed(() -> indexer.reverse())
-       .whenReleased(() -> indexer.stop());
-    
     // new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_12).whenPressed(() -> shooter.reverse())
     //     .whenReleased(() -> shooter.stop());
 
