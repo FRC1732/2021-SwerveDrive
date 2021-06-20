@@ -120,4 +120,6 @@ public final class Constants {
     public static final int MOTORMASTER = 27;
     public static final int MOTORFOLLOWER = 28;
 
+    // ================== Subsystem ::: Indexer ==================
+    public static final int BRUSH_WHEEL = 29;
 }
