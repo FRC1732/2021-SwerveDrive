@@ -117,15 +117,11 @@ public class RobotContainer {
         .whenReleased(() -> climber.stop(), climber);
 
 
-    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.shooterOn())
-       .whenReleased(() -> shooter.stop());
+    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.testMotors())
+       .whenReleased(() -> shooter.stopMotors());
     
-    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_12).whenPressed(() -> shooter.reverse())
-        .whenReleased(() -> shooter.stop());
-      
-    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_4).whenPressed(() -> shooter.increaseSpeed());
-    
-    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_5).whenPressed(() -> shooter.decreaseSpeed());
+    // new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_12).whenPressed(() -> shooter.reverse())
+    //     .whenReleased(() -> shooter.stop());
 
     // FIXME: pick a button to test wheel alignment
     // new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain));

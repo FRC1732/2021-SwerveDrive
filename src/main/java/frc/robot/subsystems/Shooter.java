@@ -19,7 +19,8 @@ public class Shooter extends SubsystemBase {
 
   private TalonFX motorOne;
   private TalonFX motorTwo;
-  private double motorPercentage;
+  private static final int SETPOINT = 10000;
+  private static final int DEADBAND = 1000;
 
   public Shooter() {
 
@@ -31,43 +32,41 @@ public class Shooter extends SubsystemBase {
     motorOne = new TalonFX(Constants.MOTORMASTER);
     motorOne.configAllSettings(talonConfig, 100);
     motorOne.setNeutralMode(NeutralMode.Coast);
+    motorTwo.setInverted(true);
 
     motorTwo = new TalonFX(Constants.MOTORFOLLOWER);
     motorTwo.configAllSettings(talonConfig, 100);
     motorTwo.setNeutralMode(NeutralMode.Coast);
-    motorTwo.setInverted(true);
-    motorTwo.follow(motorOne);
-
-    motorPercentage = 0;
+    motorTwo.setInverted(false);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    motorOne.set(ControlMode.PercentOutput, motorPercentage);
+    // This method will be called once per scheduler 
+    if (motorOne.getSelectedSensorVelocity() > 100){
+    System.out.println("Speed| "+ motorOne.getSelectedSensorVelocity());
+    System.out.println("Voltage| "+ motorOne.getBusVoltage());}
   }
 
-  public void shooterOn(){
-    motorPercentage = .8;
+  public void testMotors(){
+    motorOne.set(ControlMode.PercentOutput, 0.75d);
+    motorTwo.set(ControlMode.PercentOutput, 0.75d);
   }
 
-  public void reverse(){
-    motorPercentage = -.1;
+  public boolean maintainRPM() {
+    if(motorOne.getSelectedSensorVelocity() < SETPOINT){
+      motorOne.set(ControlMode.PercentOutput, 0.9d);
+      motorTwo.set(ControlMode.PercentOutput, 0.9d);
+    } else {
+      motorOne.set(ControlMode.PercentOutput, .5d);
+      motorTwo.set(ControlMode.PercentOutput, .5d);
+    }
+    return motorOne.getSelectedSensorVelocity() > SETPOINT - DEADBAND;
   }
 
-  public void stop(){
-    motorPercentage = 0;
+  public void stopMotors(){
+    motorOne.set(ControlMode.PercentOutput, 0);
   }
-
-  public void increaseSpeed(){
-    motorPercentage += .01;
-  }
-
-  public void decreaseSpeed(){
-    motorPercentage -= .01;
-  }
-
-
 }
 
 
