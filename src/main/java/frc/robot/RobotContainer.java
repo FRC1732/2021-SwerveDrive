@@ -102,7 +102,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(new PickUpBall(indexer, intake, feeder));
+    new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whileHeld(new PickUpBall(indexer, intake));
 
     new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.up(), climber)
         .whenReleased(() -> climber.stop(), climber);
@@ -117,8 +117,14 @@ public class RobotContainer {
         .whenReleased(() -> climber.stop(), climber);
 
 
-    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.testMotors())
+    new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.maintainRPM())
        .whenReleased(() -> shooter.stopMotors());
+
+       new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_4).whenPressed(() -> feeder.feed())
+       .whenReleased(() -> feeder.stop());
+
+       new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_5).whenPressed(() -> indexer.reverse())
+       .whenReleased(() -> indexer.stop());
     
     // new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_12).whenPressed(() -> shooter.reverse())
     //     .whenReleased(() -> shooter.stop());

@@ -19,20 +19,21 @@ public class Shooter extends SubsystemBase {
 
   private TalonFX motorOne;
   private TalonFX motorTwo;
-  private static final int SETPOINT = 10000;
-  private static final int DEADBAND = 1000;
+  private static final double SETPOINT = 6800d;
+  private static final int DEADBAND = 500;
+  private boolean setpoint = true;
 
   public Shooter() {
 
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
     talonConfig.peakOutputForward = 1.0;
-    talonConfig.peakOutputReverse = 1.0;
+    talonConfig.peakOutputReverse = -1.0;
     talonConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
 
     motorOne = new TalonFX(Constants.MOTORMASTER);
     motorOne.configAllSettings(talonConfig, 100);
     motorOne.setNeutralMode(NeutralMode.Coast);
-    motorTwo.setInverted(true);
+    motorOne.setInverted(true);
 
     motorTwo = new TalonFX(Constants.MOTORFOLLOWER);
     motorTwo.configAllSettings(talonConfig, 100);
@@ -42,30 +43,38 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(setpoint){
+    if(motorOne.getSelectedSensorVelocity() < SETPOINT){
+      motorOne.set(ControlMode.PercentOutput, 0.65d);
+      motorTwo.set(ControlMode.PercentOutput, 0.65d);
+    } else {
+      motorOne.set(ControlMode.PercentOutput, 0.375d);
+      motorTwo.set(ControlMode.PercentOutput, 0.375d);
+    }
     // This method will be called once per scheduler 
     if (motorOne.getSelectedSensorVelocity() > 100){
     System.out.println("Speed| "+ motorOne.getSelectedSensorVelocity());
     System.out.println("Voltage| "+ motorOne.getBusVoltage());}
-  }
+  }}
 
   public void testMotors(){
-    motorOne.set(ControlMode.PercentOutput, 0.75d);
-    motorTwo.set(ControlMode.PercentOutput, 0.75d);
+    motorOne.set(ControlMode.PercentOutput, 0.4d);
+    motorTwo.set(ControlMode.PercentOutput, 0.4d);
+  }
+
+  public boolean atSpeed(){
+    return motorOne.getSelectedSensorVelocity() > SETPOINT - DEADBAND;
   }
 
   public boolean maintainRPM() {
-    if(motorOne.getSelectedSensorVelocity() < SETPOINT){
-      motorOne.set(ControlMode.PercentOutput, 0.9d);
-      motorTwo.set(ControlMode.PercentOutput, 0.9d);
-    } else {
-      motorOne.set(ControlMode.PercentOutput, .5d);
-      motorTwo.set(ControlMode.PercentOutput, .5d);
-    }
+    setpoint = true;
     return motorOne.getSelectedSensorVelocity() > SETPOINT - DEADBAND;
   }
 
   public void stopMotors(){
+    setpoint = false;
     motorOne.set(ControlMode.PercentOutput, 0);
+    motorTwo.set(ControlMode.PercentOutput, 0);
   }
 }
 

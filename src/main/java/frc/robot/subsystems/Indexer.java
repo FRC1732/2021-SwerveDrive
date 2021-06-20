@@ -21,7 +21,7 @@ public class Indexer extends SubsystemBase {
   public Indexer() {
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
     talonConfig.peakOutputForward = 1.0;
-    talonConfig.peakOutputReverse = 1.0;
+    talonConfig.peakOutputReverse = -1.0;
     talonConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
 
     brushMotor = new TalonFX(Constants.BRUSH_WHEEL);
@@ -30,7 +30,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public void index() {
-    brushMotor.set(ControlMode.PercentOutput, 0.3);
+    brushMotor.set(ControlMode.PercentOutput, 0.4);
+  }
+
+  public void reverse() {
+    brushMotor.set(ControlMode.PercentOutput, -0.25);
   }
 
   public void stop() {

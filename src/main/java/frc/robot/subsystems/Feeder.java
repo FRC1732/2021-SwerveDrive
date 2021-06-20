@@ -15,6 +15,7 @@ public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
   public Feeder() {
     feedMotor = new CANSparkMax(Constants.STAGING_WHEEL, MotorType.kBrushed);
+    feedMotor.setInverted(true);
   }
 
 

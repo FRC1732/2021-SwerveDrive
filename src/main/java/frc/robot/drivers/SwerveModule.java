@@ -63,7 +63,7 @@ public class SwerveModule extends AbstractSwerveModule {
 
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
     talonConfig.peakOutputForward = 1.0;
-    talonConfig.peakOutputReverse = 1.0;
+    talonConfig.peakOutputReverse = -1.0;
     talonConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
 
     driveMotor = new TalonFX(talonID);
