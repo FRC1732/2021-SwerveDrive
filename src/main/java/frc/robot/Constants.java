@@ -121,5 +121,9 @@ public final class Constants {
     public static final int MOTORFOLLOWER = 28;
 
     // ================== Subsystem ::: Indexer ==================
-    public static final int BRUSH_WHEEL = 29;
+    public static final int BRUSH_WHEEL = 30;
+
+    // ================== Subsystem ::: Feeder ==================
+    public static final int STAGING_WHEEL = 29;
+    public static final double FEEDER_MOTOR_SPEED = 0.3;
 }

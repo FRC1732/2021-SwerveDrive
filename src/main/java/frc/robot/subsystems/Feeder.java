@@ -5,13 +5,24 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
-  /** Creates a new Feeder. */
-  public Feeder() {}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  private CANSparkMax feedMotor;
+  /** Creates a new Feeder. */
+  public Feeder() {
+    feedMotor = new CANSparkMax(Constants.STAGING_WHEEL, MotorType.kBrushed);
+  }
+
+
+  public void feed() {
+    feedMotor.set(Constants.FEEDER_MOTOR_SPEED);
+  }
+
+  public void stop() {
+      feedMotor.set(0);
   }
 }

@@ -19,6 +19,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.commands.Indexing.PickUpBall;
+import frc.robot.subsystems.Feeder;
 
 public class RobotContainer {
   // Subsystems
@@ -28,6 +29,7 @@ public class RobotContainer {
   private Climber climber;
   private Shooter shooter;
   private Indexer indexer;
+  private Feeder feeder;
 
   private SendableChooser autonomousModeOption;
 
@@ -63,6 +65,7 @@ public class RobotContainer {
     climber = new Climber();
     shooter = new Shooter();
     indexer = new Indexer();
+    feeder = new Feeder();
 
     s_drivetrain.setDefaultCommand(new DriveWithJoystick(l_joystick, r_joystick, s_drivetrain, Boolean.valueOf(false)));
 
@@ -99,7 +102,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(new PickUpBall(indexer, intake));
+    new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(new PickUpBall(indexer, intake, feeder));
 
     new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.up(), climber)
         .whenReleased(() -> climber.stop(), climber);
