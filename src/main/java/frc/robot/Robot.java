@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ public class Robot extends TimedRobot {
   // private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private RobotContainer m_robotContainer;
+  private Command m_autonomousCommand;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -38,12 +40,38 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     // m_robotContainer.setStartPosition();
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
   }
+
+
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+  }
+
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
+  @Override
+  public void autonomousInit() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    // schedule the autonomous command (example)
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
+  }
+
+  /**
+   * This function is called periodically during autonomous.
+   */
+  @Override
+  public void autonomousPeriodic() {
   }
 
   /**

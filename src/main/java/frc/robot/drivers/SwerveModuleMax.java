@@ -226,9 +226,13 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     return turnFFVoltage;
   }
 
+  public double getPosition() {
+    return driveMotor.getSensorCollection().getIntegratedSensorPosition();
+  }
+
   @Override
   double getDrivePosition() {
-    return driveMotor.getSensorCollection().getIntegratedSensorVelocity();
+    return driveMotor.getSensorCollection().getIntegratedSensorPosition();
   }
 
   @Override

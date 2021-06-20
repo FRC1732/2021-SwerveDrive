@@ -97,6 +97,10 @@ public class Drivetrain extends SubsystemBase {
     drive(0, 0, 0, false);
   }
 
+  public double getDistance() {
+    return frontRight.getPosition();
+  }
+
   public boolean setStartPosition() {
     // return true when all modules report aligned.
     boolean retval = true;

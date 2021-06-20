@@ -38,8 +38,8 @@ public class DriveWithJoystick extends CommandBase {
   @Override
   public void execute() {
     // flip +/- to match drivetrain.drive
-    double forward = Math.signum(leftJoystick.getRawAxis(1)) * -Math.pow(leftJoystick.getRawAxis(1),2);
-    double strafe = Math.signum(leftJoystick.getRawAxis(0)) * Math.pow(leftJoystick.getRawAxis(0),2);
+    double forward = Math.signum(leftJoystick.getRawAxis(1)) * Math.pow(leftJoystick.getRawAxis(1),2);
+    double strafe = Math.signum(leftJoystick.getRawAxis(0)) * -Math.pow(leftJoystick.getRawAxis(0),2);
     double rotation = Math.signum(rightJoystick.getRawAxis(0)) * Math.pow(rightJoystick.getRawAxis(0),2);
 
     forward = Math.abs(forward) < 0.05 ? 0.0 : forward;

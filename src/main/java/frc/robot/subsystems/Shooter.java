@@ -19,9 +19,9 @@ public class Shooter extends SubsystemBase {
 
   private TalonFX motorOne;
   private TalonFX motorTwo;
-  private static final double SETPOINT = 6800d;
+  private static final double SETPOINT = 7000d;
   private static final int DEADBAND = 500;
-  private boolean setpoint = true;
+  private boolean setpoint = false;
 
   public Shooter() {
 
@@ -48,8 +48,8 @@ public class Shooter extends SubsystemBase {
       motorOne.set(ControlMode.PercentOutput, 0.65d);
       motorTwo.set(ControlMode.PercentOutput, 0.65d);
     } else {
-      motorOne.set(ControlMode.PercentOutput, 0.375d);
-      motorTwo.set(ControlMode.PercentOutput, 0.375d);
+      motorOne.set(ControlMode.PercentOutput, 0.4d);
+      motorTwo.set(ControlMode.PercentOutput, 0.4d);
     }
     // This method will be called once per scheduler 
     if (motorOne.getSelectedSensorVelocity() > 100){

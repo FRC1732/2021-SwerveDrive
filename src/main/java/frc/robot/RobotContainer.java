@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.teleop.DriveWithJoystick;
+import frc.robot.commands.autonomous.DriveAndShootAuto;
 import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.commands.subsystem_controls.AlignWheelsCommand;
 import frc.robot.subsystems.DrivetrainMax;
@@ -203,7 +204,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return (Command) autonomousModeOption.getSelected();
+    // return (Command) autonomousModeOption.getSelected();
+    return new DriveAndShootAuto(s_drivetrain, indexer, intake, feeder, shooter);
   }
 
   public void setStartPosition() {
