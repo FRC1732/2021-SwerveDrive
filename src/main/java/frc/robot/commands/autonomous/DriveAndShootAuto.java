@@ -29,6 +29,7 @@ public class DriveAndShootAuto extends CommandBase {
     this.intake = intake;
     this.feeder = feeder;
     this.shooter = shooter;
+    System.out.println("tstr1!!!!!!!!!!!!");
 
     new InstantCommand(() -> intake.takeIn(true), intake)
     .andThen(new WaitCommand(0.25))
@@ -52,11 +53,12 @@ public class DriveAndShootAuto extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {System.out.println("tstr2!!!!!!!!!!!!");}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("tstr3!!!!!!!!!!!!");
     drivetrain.stop();
     indexer.stop();
     intake.takeIn(false);
@@ -67,6 +69,7 @@ public class DriveAndShootAuto extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("tstr4!!!!!!!!!!!!");
     return false;
   }
 }
