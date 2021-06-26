@@ -108,6 +108,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(l_joystick, Joystick.ButtonType.kTrigger.value).whileHeld(new PickUpBall(indexer, intake));
 
+    new JoystickButton(r_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(() -> s_drivetrain.startBeastMode())
+        .whenReleased(() -> s_drivetrain.stopBeastMode());
+
     new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.up(), climber)
         .whenReleased(() -> climber.stop(), climber);
 
