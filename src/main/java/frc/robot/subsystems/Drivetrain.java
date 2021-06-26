@@ -101,6 +101,20 @@ public class Drivetrain extends SubsystemBase {
     return frontRight.getPosition();
   }
 
+  public void startBeastMode() {
+    frontLeft.startBeastMode();
+    frontRight.startBeastMode();
+    backLeft.startBeastMode();
+    backRight.startBeastMode();
+  }
+
+  public void stopBeastMode() {
+    frontLeft.stopBeastMode();
+    frontRight.stopBeastMode();
+    backLeft.stopBeastMode();
+    backRight.stopBeastMode();
+  }
+
   public boolean setStartPosition() {
     // return true when all modules report aligned.
     boolean retval = true;

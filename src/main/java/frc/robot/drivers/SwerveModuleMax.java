@@ -59,6 +59,8 @@ public class SwerveModuleMax extends AbstractSwerveModule {
 
   private static final double TURNING_MOTOR_RATIO = 6.75422d;
 
+  private double maxDriveSpeed = 0.5d;
+
   /**
    * Constructs a SwerveModuleMax.
    * 
@@ -196,7 +198,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     // Find the difference between our current rotational position + our new rotational position
     Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
-    driveMotor.set(ControlMode.PercentOutput, (state.speedMetersPerSecond / Constants.MAX_SPEED) * 0.5d);
+    driveMotor.set(ControlMode.PercentOutput, (state.speedMetersPerSecond / Constants.MAX_SPEED) * maxDriveSpeed);
     pidController.setReference(((currentRotation.getDegrees() + rotationDelta.getDegrees()) / TURNING_MOTOR_RATIO) + offset, ControlType.kPosition);
 
   }
@@ -284,5 +286,13 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   @Override
   CANPIDController getCANPIDController() {
     return turningMotor.getPIDController();
+  }
+
+  public void startBeastMode() {
+    maxDriveSpeed = 0.9d;
+  }
+
+  public void stopBeastMode() {
+    maxDriveSpeed = 0.5d;
   }
 }
