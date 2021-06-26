@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -205,7 +207,24 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return (Command) autonomousModeOption.getSelected();
-    return new DriveAndShootAuto(s_drivetrain, indexer, intake, feeder, shooter);
+    //return new DriveAndShootAuto(s_drivetrain, indexer, intake, feeder, shooter);
+    return new InstantCommand(() -> intake.takeIn(true), intake)
+    .andThen(new WaitCommand(0.5))
+    .andThen(new InstantCommand(() -> intake.takeIn(false), intake))
+    .andThen(new InstantCommand(() -> s_drivetrain.drive(-0.5d, 0d, 0.04d, false), s_drivetrain))
+    .andThen(new WaitCommand(3.5d))
+    .andThen(new InstantCommand(() -> s_drivetrain.stop(), s_drivetrain))
+    .andThen(new InstantCommand(() -> shooter.maintainRPM(), shooter))
+    .andThen(new WaitCommand(3d))
+    .andThen(new FeedBallToShooter(indexer, intake, feeder));
+  }
+  
+  public void initTeleop(){
+    s_drivetrain.stop();
+    indexer.stop();
+    intake.takeIn(false);
+    feeder.stop();
+    shooter.stopMotors();
   }
 
   public void setStartPosition() {
