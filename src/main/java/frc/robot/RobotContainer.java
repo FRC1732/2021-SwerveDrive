@@ -111,17 +111,29 @@ public class RobotContainer {
     new JoystickButton(r_joystick, Joystick.ButtonType.kTrigger.value).whenPressed(() -> s_drivetrain.startBeastMode())
         .whenReleased(() -> s_drivetrain.stopBeastMode());
 
-    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.up(), climber)
-        .whenReleased(() -> climber.stop(), climber);
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.upL(), climber)
+        .whenReleased(() -> climber.stopL(), climber);
 
-    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_10).whenPressed(() -> climber.down(), climber)
-        .whenReleased(() -> climber.stop(), climber);
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_10).whenPressed(() -> climber.downL(), climber)
+        .whenReleased(() -> climber.stopL(), climber);
 
-    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_6).whenPressed(() -> climber.upfast(), climber)
-        .whenReleased(() -> climber.stop(), climber);
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_6).whenPressed(() -> climber.upfastL(), climber)
+        .whenReleased(() -> climber.stopL(), climber);
 
-    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_7).whenPressed(() -> climber.downfast(), climber)
-        .whenReleased(() -> climber.stop(), climber);
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_7).whenPressed(() -> climber.downfastL(), climber)
+        .whenReleased(() -> climber.stopL(), climber);
+
+    new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_11).whenPressed(() -> climber.upR(), climber)
+        .whenReleased(() -> climber.stopR(), climber);
+
+    new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_10).whenPressed(() -> climber.downR(), climber)
+        .whenReleased(() -> climber.stopR(), climber);
+
+    new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_6).whenPressed(() -> climber.upfastR(), climber)
+        .whenReleased(() -> climber.stopR(), climber);
+
+    new JoystickButton(r_joystick, Constants.R_JOYSTICKBUTTON_7).whenPressed(() -> climber.downfastR(), climber)
+        .whenReleased(() -> climber.stopR(), climber);
 
     new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_6).whenPressed(() -> shooter.maintainRPM())
         .whenReleased(() -> shooter.stopMotors());

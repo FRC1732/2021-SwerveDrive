@@ -29,28 +29,43 @@ public class Climber extends SubsystemBase {
     
   }
 
-  public void up() {
+  public void upL() {
     leftMotor.set(0.15);
+  }
+
+  public void upR() {
     rightMotor.set(0.15);
   }
 
-  public void down() {
+  public void downL() {
     leftMotor.set(-0.15);
+  }
+
+  public void downR() {
     rightMotor.set(-0.15);
   }
 
-  public void upfast() {
+  public void upfastL() {
     leftMotor.set(0.45);
+  }
+
+  public void upfastR() {
     rightMotor.set(0.45);
   }
 
-  public void downfast() {
+  public void downfastL() {
     leftMotor.set(-0.45);
-    rightMotor.set(-0.45);
   }
 
-  public void stop() {
+  public void downfastR() {
+    rightMotor.set(0.45);
+  }
+
+  public void stopL() {
     leftMotor.set(0);
+  }
+
+  public void stopR() {
     rightMotor.set(0);
   }
 
