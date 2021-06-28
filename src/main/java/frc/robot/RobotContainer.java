@@ -226,12 +226,12 @@ public class RobotContainer {
     return new InstantCommand(() -> intake.takeIn(true), intake)
     .andThen(new WaitCommand(0.5))
     .andThen(new InstantCommand(() -> intake.takeIn(false), intake))
-    .andThen(new InstantCommand(() -> s_drivetrain.drive(-0.5d, 0d, 0.04d, false), s_drivetrain))
+    .andThen(new InstantCommand(() -> s_drivetrain.drive(-0.5d, 0d, 0.0d, false), s_drivetrain))
     .andThen(new WaitCommand(3.5d))
-    .andThen(new InstantCommand(() -> s_drivetrain.stop(), s_drivetrain))
-    .andThen(new InstantCommand(() -> shooter.maintainRPM(), shooter))
-    .andThen(new WaitCommand(3d))
-    .andThen(new FeedBallToShooter(indexer, intake, feeder));
+    .andThen(new InstantCommand(() -> s_drivetrain.stop(), s_drivetrain));
+    // .andThen(new InstantCommand(() -> shooter.maintainRPM(), shooter))
+    // .andThen(new WaitCommand(3d))
+    // .andThen(new FeedBallToShooter(indexer, intake, feeder));
   }
   
   public void initTeleop(){
