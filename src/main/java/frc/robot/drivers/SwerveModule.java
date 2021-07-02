@@ -202,4 +202,9 @@ public class SwerveModule extends AbstractSwerveModule {
   CANPIDController getCANPIDController() {
     return turningMotor.getPIDController();
   }
+
+  @Override
+  double getWheelDifference() {
+    return dutyCycle.getOutput() - wheelAlignment;
+  }
 }

@@ -295,4 +295,9 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   public void stopBeastMode() {
     maxDriveSpeed = 0.5d;
   }
+
+  @Override
+  double getWheelDifference() {
+    return dutyCycle.getOutput() - wheelAlignment;
+  }
 }

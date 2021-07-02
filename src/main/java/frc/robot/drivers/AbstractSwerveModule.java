@@ -40,11 +40,11 @@ public abstract class AbstractSwerveModule {
     private void initShuffleBoard() {
         ShuffleboardLayout layout = tab.getLayout(swervePosition.toString(), BuiltInLayouts.kList).withSize(2, 4);
 
-        layout.addNumber("Turn Position (r)", this::getTurnPosition);
-        layout.addNumber("Turn Target (r)", this::getTurnTarget);
-        layout.addNumber("Turn Motor Voltage (V)", this::getTurnMotorVoltage);
-        layout.addNumber("Turn Motor Output (V)", this::getTurnMotorOutputLevel);
-        layout.addNumber("Turn Motor FF (V)", this::getTurnMotorFeedForward);
+        //layout.addNumber("Turn Position (r)", this::getTurnPosition);
+        //layout.addNumber("Turn Target (r)", this::getTurnTarget);
+        //layout.addNumber("Turn Motor Voltage (V)", this::getTurnMotorVoltage);
+        //layout.addNumber("Turn Motor Output (V)", this::getTurnMotorOutputLevel);
+        //layout.addNumber("Turn Motor FF (V)", this::getTurnMotorFeedForward);
 
         // layout.addNumber("Drive Position (m-s)", this::getDrivePosition);
         // layout.addNumber("Drive Target (m-s)", this::getDriveTarget);
@@ -52,7 +52,8 @@ public abstract class AbstractSwerveModule {
         // layout.addNumber("Drive Motor Output (m-s)", this::getDriveMotorOutputLevel);
         // layout.addNumber("Drive Motor FF (m-s)", this::getDriveMotorFeedForward);
 
-        // layout.addNumber("Wheel Alignment", this::getWheelAlignment);
+        layout.addNumber("Wheel Alignment", this::getWheelAlignment);
+        layout.addNumber("Wheel Difference", this::getWheelDifference);
 
         ShuffleboardLayout layoutPid = tabPID.getLayout(swervePosition.toString(), BuiltInLayouts.kList).withSize(2, 4);
 
@@ -94,6 +95,8 @@ public abstract class AbstractSwerveModule {
     abstract double getDriveMotorFeedForward();
 
     abstract double getWheelAlignment();
+
+    abstract double getWheelDifference();
 
     abstract boolean setStartPosition();
 
