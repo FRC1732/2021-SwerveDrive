@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
@@ -17,6 +16,7 @@ import frc.robot.Constants;
 public class Indexer extends SubsystemBase {
 
   private TalonFX brushMotor;
+
   /** Creates a new Indexer. */
   public Indexer() {
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
@@ -27,6 +27,7 @@ public class Indexer extends SubsystemBase {
     brushMotor = new TalonFX(Constants.BRUSH_WHEEL);
     brushMotor.configAllSettings(talonConfig, 100);
     brushMotor.setNeutralMode(NeutralMode.Coast);
+    brushMotor.setInverted(true);
   }
 
   public void index() {
@@ -38,6 +39,6 @@ public class Indexer extends SubsystemBase {
   }
 
   public void stop() {
-      brushMotor.set(ControlMode.PercentOutput, 0);
+    brushMotor.set(ControlMode.PercentOutput, 0);
   }
 }
