@@ -5,16 +5,28 @@
 package frc.robot.commands.Indexing;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 public class ExpelBall extends CommandBase {
+  private Indexer indexer;
+  private Intake intake;
+  
   /** Creates a new ExpelBall. */
-  public ExpelBall() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public ExpelBall(Indexer indexer, Intake intake) {
+    addRequirements(indexer);
+    addRequirements(intake);
+    this.indexer = indexer;
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    indexer.reverse();
+    intake.reverse();
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -22,7 +34,10 @@ public class ExpelBall extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    indexer.stop();
+    intake.stop();
+  }
 
   // Returns true when the command should end.
   @Override

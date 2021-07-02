@@ -18,6 +18,9 @@ public class Feeder extends SubsystemBase {
     feedMotor.setInverted(true);
   }
 
+  public void reverse() {
+    feedMotor.set(-0.25);
+  }
 
   public void feed() {
     feedMotor.set(Constants.FEEDER_MOTOR_SPEED);
