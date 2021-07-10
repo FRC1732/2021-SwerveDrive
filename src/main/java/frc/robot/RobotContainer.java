@@ -237,7 +237,8 @@ public class RobotContainer {
         .andThen(new WaitCommand(3.5d)).andThen(new InstantCommand(() -> s_drivetrain.stop(), s_drivetrain))
         .andThen(new InstantCommand(() -> shooter.maintainRPM(), shooter))
         .andThen(new WaitCommand(3d))
-        .andThen(new FeedBallToShooter(indexer, intake, feeder));
+        .andThen(new FeedBallToShooter(indexer, intake, feeder))
+        .andThen(new WaitCommand(5d));
   }
 
   public void initTeleop() {
