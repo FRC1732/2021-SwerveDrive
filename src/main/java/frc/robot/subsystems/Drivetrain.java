@@ -130,7 +130,7 @@ public class Drivetrain extends SubsystemBase {
     backRight.stopBeastMode();
   }
 
-  public boolean setStartPosition() {
+  public boolean setAlignmentPosition() {
     // return true when all modules report aligned.
     boolean retval = true;
     retval &= frontLeft.setStartPosition();
