@@ -28,7 +28,7 @@ import frc.robot.subsystems.Feeder;
 
 public class RobotContainer {
   // Subsystems
-  public static Drivetrain s_drivetrain;
+  private Drivetrain s_drivetrain;
   private MotorTestSubsystem motorTestSubsystem;
   private Intake intake;
   private Climber climber;
@@ -144,6 +144,11 @@ public class RobotContainer {
         .whileHeld(new FeedBallToShooter(indexer, intake, feeder));
 
     new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_5).whileHeld(new ExpelBall(indexer, intake));
+
+    new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1)
+        .whileHeld(new AlignWheelsCommand(s_drivetrain));
+    
+        
 
     // new JoystickButton(o_joystick,Constants.O_JOYSTICKBUTTON_12).whenPressed(()
     // -> shooter.reverse())

@@ -14,13 +14,19 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.drivers.SwerveModule;
+// import frc.robot.drivers.SwerveModule;
 import frc.robot.drivers.SwerveModuleMax;
 import frc.robot.drivers.SwervePosition;
 import frc.robot.Constants;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
+
+  ShuffleboardTab tab = Shuffleboard.getTab("Alignment");
+
   private static final double TRACKWIDTH = 0.3854; // in meters
   private static final double WHEELBASE = 0.3854; // in meters
 
@@ -37,11 +43,11 @@ public class Drivetrain extends SubsystemBase {
       Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_TARGET, SwervePosition.FrontLeft);
 
   private final SwerveModuleMax frontRight = new SwerveModuleMax(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE,
-      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_FRONT_RIGHT_AZIMUTH, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET, SwervePosition.FrontRight);
 
   private final SwerveModuleMax backLeft = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_LEFT_DRIVE,
-      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL,
+      Constants.DRIVETRAIN_BACK_LEFT_AZIMUTH, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL,
       Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_TARGET, SwervePosition.BackLeft);
 
   private final SwerveModuleMax backRight = new SwerveModuleMax(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE,
@@ -53,8 +59,17 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, new Rotation2d());
 
+  
+
+
+
   public Drivetrain() {
     gyro.reset();
+
+    tab.addNumber("Back Right Alignment", () -> backRight.getWheelAlignment());
+    tab.addNumber("Front Right Alignment", () -> frontRight.getWheelAlignment());
+    tab.addNumber("Back Left Alignment", () -> backLeft.getWheelAlignment());
+    tab.addNumber("Front Left Alignment", () -> frontLeft.getWheelAlignment());
   }
 
   /**

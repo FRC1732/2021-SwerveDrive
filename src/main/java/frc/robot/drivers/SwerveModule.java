@@ -15,8 +15,8 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
+//import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -46,7 +46,7 @@ public class SwerveModule extends AbstractSwerveModule {
   private double turnOutput;
   private double turnFFVoltage;
 
-  private DutyCycle dutyCycle;
+  //private DutyCycle dutyCycle;
   private final double wheelAlignment;
 
   /**
@@ -87,7 +87,7 @@ public class SwerveModule extends AbstractSwerveModule {
     optimizedState = new SwerveModuleState();
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
+    //dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
     this.wheelAlignment = wheelAlignment;
   }
 
@@ -174,28 +174,30 @@ public class SwerveModule extends AbstractSwerveModule {
 
   @Override
   public boolean setStartPosition() {
-    double target = dutyCycle.getOutput();
+    // double target = dutyCycle.getOutput();
 
-    // we spin the turn motor positive only, even if the alignment is behind us
-    // expecting to loop around that align eventually. We may need to rethink this
-    // approach if we have problems.
-    if (Math.abs(target - wheelAlignment) > 2.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
-      turningMotor.set(0.2); // faster
-    } else if (Math.abs(target - wheelAlignment) > MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
-      turningMotor.set(0.1); // slower
-    } else {
-      turningMotor.set(0.0); // stop
-      turningEncoder.setPosition(0.0);
-      driveMotor.setSelectedSensorPosition(0.0);
-      return true;
-    }
+    // // we spin the turn motor positive only, even if the alignment is behind us
+    // // expecting to loop around that align eventually. We may need to rethink this
+    // // approach if we have problems.
+    // if (Math.abs(target - wheelAlignment) > 2.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+    //   turningMotor.set(0.2); // faster
+    // } else if (Math.abs(target - wheelAlignment) > MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+    //   turningMotor.set(0.1); // slower
+    // } else {
+    //   turningMotor.set(0.0); // stop
+    //   turningEncoder.setPosition(0.0);
+    //   driveMotor.setSelectedSensorPosition(0.0);
+    //   return true;
+    // }
 
-    return false;
+    // return false;
+    return true;
   }
 
   @Override
   double getWheelAlignment() {
-    return dutyCycle.getOutput();
+    // return dutyCycle.getOutput();
+    return 0;
   }
 
   @Override
@@ -205,6 +207,7 @@ public class SwerveModule extends AbstractSwerveModule {
 
   @Override
   double getWheelDifference() {
-    return dutyCycle.getOutput() - wheelAlignment;
+    // return dutyCycle.getOutput() - wheelAlignment;
+    return 0;
   }
 }

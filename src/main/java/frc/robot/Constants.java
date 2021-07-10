@@ -34,6 +34,10 @@ public final class Constants {
     public static final int DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = 7;
     public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 6;
     public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 8;
+    // public static final int DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = 1;
+    // public static final int DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = 2;
+    // public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 3;
+    // public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 4;
 
     public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.633;
     public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.812;

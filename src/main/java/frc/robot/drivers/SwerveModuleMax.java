@@ -115,7 +115,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     optimizedState = new SwerveModuleState();
     //turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    //dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
+    dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
     this.wheelAlignment = wheelAlignment;
 
     offset = turningEncoder.getPosition();
@@ -279,8 +279,9 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   }
 
   @Override
-  double getWheelAlignment() {
+  public double getWheelAlignment() {
     return dutyCycle.getOutput();
+    //return dutyCycle.getFrequency();
   }
 
   @Override
