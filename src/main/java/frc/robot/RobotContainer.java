@@ -145,8 +145,8 @@ public class RobotContainer {
 
     new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_5).whileHeld(new ExpelBall(indexer, intake));
 
-    new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1)
-        .whileHeld(new AlignWheelsCommand(s_drivetrain));
+    // new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1)
+    //     .whileHeld(new AlignWheelsCommand(s_drivetrain));
     
         
 
