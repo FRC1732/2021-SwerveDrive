@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.drivers.SwerveModule;
 import frc.robot.drivers.SwerveModuleMax;
 import frc.robot.drivers.SwervePosition;
+import com.ctre.phoenix.CANifier;
 import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -63,13 +64,13 @@ public class Drivetrain extends SubsystemBase {
 
 
 
-  public Drivetrain() {
+  public Drivetrain(CANifier canifier) {
     gyro.reset();
 
-    tab.addNumber("Back Right Alignment", () -> backRight.getWheelAlignment());
-    tab.addNumber("Front Right Alignment", () -> frontRight.getWheelAlignment());
-    tab.addNumber("Back Left Alignment", () -> backLeft.getWheelAlignment());
-    tab.addNumber("Front Left Alignment", () -> frontLeft.getWheelAlignment());
+    tab.addNumber("Back Right Alignment", () -> backRight.getWheelAlignment(canifier, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL));
+    tab.addNumber("Front Right Alignment", () -> frontRight.getWheelAlignment(canifier, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL));
+    tab.addNumber("Back Left Alignment", () -> backLeft.getWheelAlignment(canifier, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL));
+    tab.addNumber("Front Left Alignment", () -> frontLeft.getWheelAlignment(canifier, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL));
   }
 
   /**
@@ -130,13 +131,13 @@ public class Drivetrain extends SubsystemBase {
     backRight.stopBeastMode();
   }
 
-  public boolean setAlignmentPosition() {
+  public boolean setAlignmentPosition(CANifier canifier) {
     // return true when all modules report aligned.
     boolean retval = true;
-    retval &= frontLeft.setStartPosition();
-    retval &= frontRight.setStartPosition();
-    retval &= backLeft.setStartPosition();
-    retval &= backRight.setStartPosition();
+    retval &= frontLeft.setStartPosition(canifier);
+    retval &= frontRight.setStartPosition(canifier);
+    retval &= backLeft.setStartPosition(canifier);
+    retval &= backRight.setStartPosition(canifier);
 
     if (retval) {
       gyro.reset();

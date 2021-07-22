@@ -7,14 +7,18 @@ package frc.robot.commands.subsystem_controls;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
+import com.ctre.phoenix.CANifier;
+
 public class AlignWheelsCommand extends CommandBase {
   private Drivetrain driveTrain;
+  private CANifier canifier;
   private boolean isFinished;
 
   /** Creates a new AlignWheelsCommand. */
-  public AlignWheelsCommand(Drivetrain driveTrain) {
+  public AlignWheelsCommand(Drivetrain driveTrain, CANifier canifier) {
     addRequirements(driveTrain);
     this.driveTrain = driveTrain;
+    this.canifier = canifier;
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +29,15 @@ public class AlignWheelsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    isFinished = driveTrain.setAlignmentPosition();
+    isFinished = driveTrain.setAlignmentPosition(canifier);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (interrupted) {
       driveTrain.stop();
+    }
   }
 
   // Returns true when the command should end.

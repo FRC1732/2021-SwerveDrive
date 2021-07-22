@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import com.revrobotics.CANPIDController;
+import com.ctre.phoenix.CANifier;
 
 public class SwerveModuleMax extends AbstractSwerveModule {
   // Encoder returns revolutions; convert to radians; apply gear ratio
@@ -70,7 +71,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
    * @param wheelAlignment  Value of wheel alignment when going forward
    * @param position        Notation of position of the module on the robot
    */
-  public SwerveModuleMax(int talonID, int sparkID, int absoluteChannel, double wheelAlignment, SwervePosition position) {
+  public SwerveModuleMax(int talonID, int sparkID, CANifier.PWMChannel absoluteChannel, double wheelAlignment, SwervePosition position) {
     super(position);
 
     TalonFXConfiguration talonConfig = new TalonFXConfiguration();
@@ -115,7 +116,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
     optimizedState = new SwerveModuleState();
     //turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
+    //dutyCycle = new DutyCycle(new DigitalInput(absoluteChannel));
     this.wheelAlignment = wheelAlignment;
 
     offset = turningEncoder.getPosition();
@@ -258,15 +259,16 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   }
 
   @Override
-  public boolean setStartPosition() {
-    double target = dutyCycle.getOutput();
+  public boolean setStartPosition(CANifier canifier) {
+    double target[] = {0,0};
+    canifier.getPWMInput(CANifier.PWMChannel.PWMChannel0, target);
 
     // we spin the turn motor positive only, even if the alignment is behind us
     // expecting to loop around that align eventually. We may need to rethink this
     // approach if we have problems.
-    if (Math.abs(target - wheelAlignment) > 2.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+    if (Math.abs(target[0] - wheelAlignment) > 2.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
       turningMotor.set(0.2); // faster
-    } else if (Math.abs(target - wheelAlignment) > MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+    } else if (Math.abs(target[0] - wheelAlignment) > MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
       turningMotor.set(0.1); // slower
     } else {
       turningMotor.set(0.0); // stop
@@ -279,9 +281,10 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   }
 
   @Override
-  public double getWheelAlignment() {
-    return dutyCycle.getOutput();
-    //return dutyCycle.getFrequency();
+  public double getWheelAlignment(CANifier canifier, CANifier.PWMChannel ch) {
+    double target[] = {0,0};
+    canifier.getPWMInput(ch, target);
+    return target[0];
   }
 
   @Override
@@ -295,10 +298,5 @@ public class SwerveModuleMax extends AbstractSwerveModule {
 
   public void stopBeastMode() {
     maxDriveSpeed = 0.5d;
-  }
-
-  @Override
-  double getWheelDifference() {
-    return dutyCycle.getOutput() - wheelAlignment;
   }
 }

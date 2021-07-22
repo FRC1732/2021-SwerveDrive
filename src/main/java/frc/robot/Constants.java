@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.CANifier;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -30,14 +32,10 @@ public final class Constants {
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE = 4;
     public static final int DRIVETRAIN_BACK_LEFT_DRIVE = 5;
 
-    public static final int DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = 9;
-    public static final int DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = 7;
-    public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 6;
-    public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 8;
-    // public static final int DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = 1;
-    // public static final int DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = 2;
-    // public static final int DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = 3;
-    // public static final int DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = 4;
+    public static final CANifier.PWMChannel DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL = CANifier.PWMChannel.PWMChannel0;
+    public static final CANifier.PWMChannel DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL = CANifier.PWMChannel.PWMChannel1;
+    public static final CANifier.PWMChannel DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL = CANifier.PWMChannel.PWMChannel2;
+    public static final CANifier.PWMChannel DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL = CANifier.PWMChannel.PWMChannel3;
 
     public static final double DRIVETRAIN_BACK_RIGHT_ALIGNMENT_TARGET = 0.633;
     public static final double DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_TARGET = 0.812;
