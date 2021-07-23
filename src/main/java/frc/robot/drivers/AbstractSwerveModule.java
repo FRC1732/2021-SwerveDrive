@@ -97,7 +97,7 @@ public abstract class AbstractSwerveModule {
 
     abstract double getWheelAlignment(CANifier canifier, CANifier.PWMChannel ch);
 
-    abstract boolean setStartPosition(CANifier canifier);
+    abstract boolean setStartPosition(CANifier canifier, CANifier.PWMChannel absChannel);
 
     abstract CANPIDController getCANPIDController();
 }

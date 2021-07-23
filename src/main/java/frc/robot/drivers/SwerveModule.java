@@ -174,7 +174,7 @@ public class SwerveModule extends AbstractSwerveModule {
   }
 
   @Override
-  public boolean setStartPosition(CANifier canifier) {
+  public boolean setStartPosition(CANifier canifier, CANifier.PWMChannel absChannel) {
     double target = dutyCycle.getOutput();
 
     // we spin the turn motor positive only, even if the alignment is behind us

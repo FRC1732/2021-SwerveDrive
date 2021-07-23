@@ -259,16 +259,18 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   }
 
   @Override
-  public boolean setStartPosition(CANifier canifier) {
+  public boolean setStartPosition(CANifier canifier, CANifier.PWMChannel absChannel) {
     double target[] = {0,0};
-    canifier.getPWMInput(CANifier.PWMChannel.PWMChannel0, target);
+    canifier.getPWMInput(absChannel, target);
+
+    target[0] /= 4096.0;
 
     // we spin the turn motor positive only, even if the alignment is behind us
     // expecting to loop around that align eventually. We may need to rethink this
     // approach if we have problems.
     if (Math.abs(target[0] - wheelAlignment) > 2.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
       turningMotor.set(0.2); // faster
-    } else if (Math.abs(target[0] - wheelAlignment) > MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
+    } else if (Math.abs(target[0] - wheelAlignment) > 1.0 * MAX_SLOP_FOR_WHEEL_ALIGNMNET) {
       turningMotor.set(0.1); // slower
     } else {
       turningMotor.set(0.0); // stop
@@ -284,6 +286,7 @@ public class SwerveModuleMax extends AbstractSwerveModule {
   public double getWheelAlignment(CANifier canifier, CANifier.PWMChannel ch) {
     double target[] = {0,0};
     canifier.getPWMInput(ch, target);
+    target[0] /= 4096.0;
     return target[0];
   }
 

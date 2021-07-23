@@ -64,7 +64,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Declare subsystems
-    canifier = new CANifier(0);
+    canifier = new CANifier(11);
     s_drivetrain = new Drivetrain(canifier);// DrivetrainMax();
     l_joystick = new Joystick(Constants.LEFT_JOYSTICK_PORT_ID);
     r_joystick = new Joystick(Constants.RIGHT_JOYSTICK_PORT_ID);
@@ -150,7 +150,7 @@ public class RobotContainer {
     new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_5).whileHeld(new ExpelBall(indexer, intake));
 
     //FIXME: pick a button to test wheel alignment
-    new JoystickButton(l_joystick, Constants.L_JOYSTICKBUTTON_2).whenPressed(new AlignWheelsCommand(s_drivetrain, canifier));
+    new JoystickButton(l_joystick, Constants.R_JOYSTICKBUTTON_3).whenPressed(new AlignWheelsCommand(s_drivetrain, canifier));
 
     // new JoystickButton(o_joystick, Constants.O_JOYSTICKBUTTON_1)
     //     .whileHeld(new AlignWheelsCommand(s_drivetrain));

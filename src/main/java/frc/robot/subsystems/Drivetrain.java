@@ -67,10 +67,10 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain(CANifier canifier) {
     gyro.reset();
 
-    tab.addNumber("Back Right Alignment", () -> backRight.getWheelAlignment(canifier, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL));
+    tab.addNumber("Front Left Alignment", () -> backRight.getWheelAlignment(canifier, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL));
     tab.addNumber("Front Right Alignment", () -> frontRight.getWheelAlignment(canifier, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL));
     tab.addNumber("Back Left Alignment", () -> backLeft.getWheelAlignment(canifier, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL));
-    tab.addNumber("Front Left Alignment", () -> frontLeft.getWheelAlignment(canifier, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL));
+    tab.addNumber("Back Right Alignment", () -> frontLeft.getWheelAlignment(canifier, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL));
   }
 
   /**
@@ -134,10 +134,10 @@ public class Drivetrain extends SubsystemBase {
   public boolean setAlignmentPosition(CANifier canifier) {
     // return true when all modules report aligned.
     boolean retval = true;
-    retval &= frontLeft.setStartPosition(canifier);
-    retval &= frontRight.setStartPosition(canifier);
-    retval &= backLeft.setStartPosition(canifier);
-    retval &= backRight.setStartPosition(canifier);
+    retval &= frontLeft.setStartPosition(canifier, Constants.DRIVETRAIN_FRONT_LEFT_ALIGNMENT_CHANNEL);
+    retval &= frontRight.setStartPosition(canifier, Constants.DRIVETRAIN_FRONT_RIGHT_ALIGNMENT_CHANNEL);
+    retval &= backLeft.setStartPosition(canifier, Constants.DRIVETRAIN_BACK_LEFT_ALIGNMENT_CHANNEL);
+    retval &= backRight.setStartPosition(canifier, Constants.DRIVETRAIN_BACK_RIGHT_ALIGNMENT_CHANNEL);
 
     if (retval) {
       gyro.reset();
